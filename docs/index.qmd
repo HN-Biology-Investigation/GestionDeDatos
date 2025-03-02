@@ -13,20 +13,20 @@ En este curso, exploraremos técnicas avanzadas de limpieza y gestión de datos 
 
 [Filtración, reestructuración de datos y formatos longitudinales y anchos](Clase2.html)
 
-[Unión de conjuntos de datos y manejo de fechas]()
+[Unión de conjuntos de datos y manejo de fechas](Clase3.html)
 
-[Uso de Rmarkdown: Rnotebook y Quarto]()
+[Uso de Rmarkdown: Rnotebook y Quarto](Clase4.html)
 
-[Introducción a Gráficos con ggplot2]()
+[Introducción a Gráficos con ggplot2](Clase5.html)
 
-[Introducción a Gráficos Interactivos con plotly]()
+[Introducción a Gráficos Interactivos con plotly](Clase6.html)
 
-[Visualización de Datos Multivariados]()
+[Visualización de Datos Multivariados](Clase7.html)
 
-[Visualización de Modelos Estadísticos]()
+[Visualización de Modelos Estadísticos](Clase8.html)
 
-[Gráficos Dinámicos con gganimate y otros complementos]()
+[Gráficos Dinámicos con gganimate y otros complementos](Clase9.html)
 
-[Uso de la plataforma Git y GitHub]()
+[Uso de la plataforma Git y GitHub](Clase10.html)
 
 ![HN Biology Investigation Academy](HN Cursos publicidad/HN Biology Inv large.jpg)
