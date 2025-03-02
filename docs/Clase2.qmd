@@ -1,0 +1,25 @@
+---
+title: "Clase 2: Filtración, reestructuración de datos y formatos longitudinales y anchos"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Filtración avanzada de datos con dplyr
+
+Uso de operadores lógicos (>, <, ==, !=, &, |)
+
+Filtrado de múltiples condiciones.
+
+Uso de between(), filter_if(), y filter_at().
+
+## Reestructuración de datos con tidyr
+
+separate(): Dividir columnas en múltiples variables.
+unite(): Unir múltiples columnas en una sola.
+
+## Uso de group_by() y summarise
+
+## Transformación entre formato ancho y formato largo
+
+pivot_longer() y pivot_wider()

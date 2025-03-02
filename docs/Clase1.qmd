@@ -1,0 +1,32 @@
+---
+title: "Clase 1: Introducción a tidyverse y conceptos básicos de limpieza de datos"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+
+## Objetivo de la clase
+
+Conocer qué es tidyverse y por qué es útil para manipular datos en R.
+Aprender las funciones básicas de limpieza de datos con `dplyr` y `tidyr`.
+
+
+## Introducción a R y tidyverse
+
+¿Qué es tidyverse? 
+
+Es un conjunto de paquetes diseñados para facilitar el trabajo con datos en R.
+[tidyverse](https://www.tidyverse.org/)
+
+```{r}
+library(tidyverse)
+```
+
+## Carga y exploración de datos
+
+## Selección y filtrado de datos con dplyr
+
+## Transformación de datos con mutate() y rename()
+
+## Manejo de valores faltantes con tidyr
