@@ -1,27 +1,32 @@
 ---
-title: "index"
+title: "Curso de Gestión, Limpieza y Visualización de Datos con R"
 author: "David Murillo"
 format: html
 editor: visual
 ---
 
-## Quarto
+En este curso, exploraremos técnicas avanzadas de limpieza y gestión de datos utilizando R, con un enfoque principal en la utilización del paquete tidyverse. Desde el filtrado y selección de datos hasta la manipulación y transformación de conjuntos de datos complejos, aprenderemos a utilizar las herramientas proporcionadas por tidyverse para realizar tareas clave en el preprocesamiento de datos.
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+## Contenido
 
-## Running Code
+[Introducción a tidyverse y conceptos básicos de limpieza de datos]()
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+[Filtración, reestructuración de datos y formatos longitudinales y anchos]()
 
-```{r}
-1 + 1
-```
+[Unión de conjuntos de datos y manejo de fechas]()
 
-You can add options to executable code like this
+[Uso de Rmarkdown: Rnotebook y Quarto]()
 
-```{r}
-#| echo: false
-2 * 2
-```
+[Introducción a Gráficos con ggplot2]()
 
-The `echo: false` option disables the printing of code (only output is displayed).
+[Introducción a Gráficos Interactivos con plotly]()
+
+[Visualización de Datos Multivariados]()
+
+[Visualización de Modelos Estadísticos]()
+
+[Gráficos Dinámicos con gganimate y otros complementos]()
+
+[Uso de la plataforma Git y GitHub]()
+
+![HN Biology Investigation Academy](HN Cursos publicidad/HN Biology Inv large.jpg)
