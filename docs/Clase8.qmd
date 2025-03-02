@@ -1,0 +1,16 @@
+---
+title: "Clase 8: Visualización de Modelos Estadísticos"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Visualización de Modelos Lineales (lm) con ggplot2
+
+## Visualización de Modelos Generalizados (glm) con ggplot2
+
+## Visualización de Modelos con ggpredict
+
+## Uso de sjPlot para Visualización de Modelos
+
+## Visualización de Residuos del Modelo 

@@ -1,0 +1,16 @@
+---
+title: "Clase 7: Visualización de Datos Multivariados"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Introducción a la Visualización Multivariada
+
+## Gráficos de Dispersión Multivariados
+
+## Matrices de Dispersión para Múltiples Variables
+
+## PCA y Visualización de Componentes Principales
+
+## NMDS

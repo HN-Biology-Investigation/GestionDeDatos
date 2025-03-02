@@ -1,0 +1,16 @@
+---
+title: "Clase 6: Introducción a Gráficos Interactivos con plotly"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Introducción a plotly y gráficos interactivos
+
+## Creación de gráficos básicos con plotly
+
+## Gráficos de barras y histogramas interactivos
+
+## Gráficos de caja y densidad interactivos
+
+## Personalización avanzada y temas en plotly
