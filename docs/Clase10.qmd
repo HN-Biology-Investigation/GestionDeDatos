@@ -1,0 +1,14 @@
+---
+title: "Clase 10: Uso de la plataforma Git y GitHub"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Instalación de Git
+
+En Windows, puedes instalar Git desde https://git-scm.com.
+
+## Creación de un repositorio local 
+
+## Creación de un repositorio en GitHub

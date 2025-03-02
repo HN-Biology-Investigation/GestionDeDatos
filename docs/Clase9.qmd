@@ -1,0 +1,16 @@
+---
+title: "Clase 9: Gráficos Dinámicos con gganimate y otros complementos"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Introducción a los gráficos dinámicos
+
+## Introducción a gganimate
+
+## Personalización de animaciones con gganimate
+
+## Exportación de las animaciones
+
+## Gráficos con leaflet
