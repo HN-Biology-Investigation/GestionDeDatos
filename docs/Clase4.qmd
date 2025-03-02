@@ -1,0 +1,23 @@
+---
+title: "Clase 4: Uso de Rmarkdown: Rnotebook y Quarto"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Introducción a los reportes reproducibles 
+
+## Introducción a RMarkdown
+
+¿Qué es RMarkdown?
+Estructura de un archivo .Rmd.
+Encabezado YAML (title, author, date, output).
+Código en R dentro de un RMarkdown 
+
+```{r}
+
+```
+
+Texto en formato Markdown (negritas, listas, encabezados).
+
+## Introducción a Quarto

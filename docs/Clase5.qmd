@@ -1,0 +1,16 @@
+---
+title: "Clase 5: Introducción a Gráficos con ggplot2"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+##  Introducción a ggplot2 y el enfoque basado en capas
+
+## Creación de gráficos de dispersión y líneas base
+
+## Gráficos de barras y histogramas 
+
+## Boxplots y violín para distribuciones
+
+## Personalización avanzada de gráficos

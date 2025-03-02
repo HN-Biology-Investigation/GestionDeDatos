@@ -1,0 +1,20 @@
+---
+title: "Clase 3: Unión de conjuntos de datos y manejo de fechas"
+author: "David Murillo"
+format: html
+editor: visual
+---
+
+## Unión de conjuntos de datos con dplyr
+
+Tipos de uniones: left_join(), right_join(), inner_join(), full_join(), semi_join(), anti_join().
+
+Uso de bind_rows() y bind_cols().
+
+## Introducción a manejo de fechas con lubridate
+
+Conversión de fechas con ymd(), mdy(), dmy()
+
+Extracción de componentes: día, mes, año, hora, minutos
+
+## Unión de datos con fechas y formatos de tiempo
