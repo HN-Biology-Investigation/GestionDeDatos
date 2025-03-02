@@ -9,9 +9,9 @@ En este curso, exploraremos técnicas avanzadas de limpieza y gestión de datos 
 
 ## Contenido
 
-[Introducción a tidyverse y conceptos básicos de limpieza de datos]()
+[Introducción a tidyverse y conceptos básicos de limpieza de datos](Clase1.html)
 
-[Filtración, reestructuración de datos y formatos longitudinales y anchos]()
+[Filtración, reestructuración de datos y formatos longitudinales y anchos](Clase2.html)
 
 [Unión de conjuntos de datos y manejo de fechas]()
 
