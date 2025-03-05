@@ -105,7 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <p>En esta primera clase, exploraremos Tidyverse, un conjunto de paquetes en R diseñado para la manipulación, visualización y análisis de datos de manera eficiente y estructurada. Nos enfocaremos en los conceptos fundamentales para la limpieza de datos, una etapa clave en cualquier análisis, que nos permitirá transformar datos crudos en información lista para su exploración y modelado.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Introducción a R y tidyverse</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Carga y exploración de datos</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Selección y filtrado de datos con dplyr</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Transformación de datos con mutate() y rename()</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Manejo de valores faltantes con tidyr</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Introducción a R y tidyverse</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Carga y exploración de datos</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Selección y filtrado de datos con dplyr</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Transformación de datos con mutate() y rename()</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Manejo de valores faltantes con tidyr</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false" href="">Uso de tuberias (%&gt;%) o (|&gt;)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <p>¿Qué es tidyverse?</p>
@@ -222,11 +222,11 @@ Attaching package: 'terra'</code></pre>
 </div>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
-<p>De las bases de datos vistas nteriormente, para nuestro porximo ejercisio utilizaremos la base de datos <code>Students_Grading_Dataset.json</code>, a la cual llamaremos “Estudiantes”</p>
+<p>De las bases de datos vistas anteriormente, para nuestro próximo ejercicio utilizaremos la base de datos <code>Students_Grading_Dataset.json</code>, a la cual denominaremos “Estudiantes”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/Students_Grading_Dataset.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>De esta base de datos podemos apreciar que Cada estudiante tiene su “ID”, genero, sexo, Edad, Departamento, % de asistencia y Calificaciones.</p>
+<p>En esta base de datos, podemos observar que cada estudiante tiene asignado un ID, género, edad, departamento, porcentaje de asistencia y calificaciones.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(Estudiantes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -256,7 +256,7 @@ Attaching package: 'terra'</code></pre>
  $ Sleep_Hours_per_Night     : num  4.7 9 6.2 6.7 7.1 5 6.4 4.3 8.8 6.4 ...</code></pre>
 </div>
 </div>
-<p>En nuestro caso queremos conocer que deparmentos y queremos filtrar una base de datos para cada uno de ellos por separado.</p>
+<p>En este ejercicio, queremos conocer los diferentes departamentos y filtrar la base de datos para trabajar con los datos de cada uno por separado.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Estudiantes<span class="sc">$</span>Department)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -265,8 +265,8 @@ Attaching package: 'terra'</code></pre>
        1006        2022        1469         503 </code></pre>
 </div>
 </div>
-<p>Observamos que existen cuatro departamentos: Business, CS, Engineering y Mathematics. Siendo CS la que presenta mayor numero de estudiantes con 2022.</p>
-<p>Si utilizamos <code>filter</code> podemos filtrar en base a un criterio que queramos.</p>
+<p>Al revisar los departamentos, encontramos que hay cuatro: Business, CS, Engineering y Mathematics, siendo CS el departamento con el mayor número de estudiantes, con un total de 2022.</p>
+<p>Podemos utilizar <code>filter</code> para filtrar los datos en función de cualquier criterio que elijamos.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>CS <span class="ot">&lt;-</span> <span class="fu">filter</span>(Estudiantes, Department <span class="sc">==</span> <span class="st">"CS"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -316,7 +316,7 @@ Attaching package: 'terra'</code></pre>
 6                   4.8</code></pre>
 </div>
 </div>
-<p>Otra manera de filtrar es en base a un umbral, por ejemplo los estudnates con calificaciones mayores a 0.8</p>
+<p>Otra opción es filtrar en función de un umbral. Por ejemplo, podemos seleccionar a los estudiantes con calificaciones superiores a 80</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>App <span class="ot">&lt;-</span> <span class="fu">filter</span>(Estudiantes, Final_Score <span class="sc">&gt;</span> <span class="dv">80</span> )</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(App)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -365,7 +365,7 @@ Attaching package: 'terra'</code></pre>
 6                   4.1</code></pre>
 </div>
 </div>
-<p>Tambien podemos filtrar las calificaciones &gt; 80 y del departamento “CS”</p>
+<p>También es posible combinar condiciones. Por ejemplo, filtrar a los estudiantes con calificaciones mayores a 80 y que pertenezcan al departamento “CS”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>App_CS <span class="ot">&lt;-</span> <span class="fu">filter</span>(Estudiantes, Final_Score <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">&amp;</span> Department <span class="sc">==</span> <span class="st">"CS"</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -417,10 +417,193 @@ Attaching package: 'terra'</code></pre>
 </div>
 </div>
 <div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
-
+<p>En este ejercicio, continuaremos utilizando la base de datos “Estudiantes”. Nos enfocaremos en transformar los datos, específicamente renombrando algunas de las variables para hacerlas más comprensibles o ajustarlas a un formato más adecuado.</p>
+<p>Uso de rename()</p>
+<p>El función rename() de dplyr se utiliza para cambiar el nombre de una o más columnas en un data frame. La sintaxis básica es la siguiente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">rename</span>(Estudiantes, <span class="st">"Nombre"</span> <span class="ot">=</span>  <span class="st">"First_Name"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">rename</span>(Estudiantes, <span class="st">"Apellido"</span> <span class="ot">=</span>  <span class="st">"Last_Name"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">rename</span>(Estudiantes, <span class="st">"Asistencia"</span> <span class="ot">=</span>  <span class="st">"Attendance (%)"</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Estudiantes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Student_ID Nombre Apellido                   Email Gender Age  Department
+1      S1000   Omar Williams student0@university.com Female  22 Engineering
+2      S1001  Maria    Brown student1@university.com   Male  18 Engineering
+3      S1002  Ahmed    Jones student2@university.com   Male  24    Business
+4      S1003   Omar Williams student3@university.com Female  24 Mathematics
+5      S1004   John    Smith student4@university.com Female  23          CS
+6      S1005   Liam    Brown student5@university.com   Male  21 Engineering
+  Asistencia Midterm_Score Final_Score Assignments_Avg Quizzes_Avg
+1      52.29         55.03       57.82           84.22       74.06
+2      97.27         97.23       45.80              NA       94.24
+3      57.19         67.05       93.68           67.70       85.70
+4      95.15         47.79       80.63           66.06       93.51
+5      54.18         46.59       78.89           96.85       83.70
+6         NA         78.85       43.53           71.40       52.20
+  Participation_Score Projects_Score Total_Score Grade Study_Hours_per_Week
+1                3.99          85.90       56.09     F                  6.2
+2                8.32          55.65       50.64     A                 19.0
+3                5.05          73.79       70.30     D                 20.7
+4                6.54          92.12       61.63     A                 24.8
+5                5.97          68.42       66.13     F                 15.4
+6                6.38          67.29       62.08     B                  8.5
+  Extracurricular_Activities Internet_Access_at_Home Parent_Education_Level
+1                         No                     Yes            High School
+2                         No                     Yes                   None
+3                         No                     Yes               Master's
+4                        Yes                     Yes            High School
+5                        Yes                     Yes            High School
+6                        Yes                     Yes                    PhD
+  Family_Income_Level Stress_Level (1-10) Sleep_Hours_per_Night
+1              Medium                   5                   4.7
+2              Medium                   4                   9.0
+3                 Low                   6                   6.2
+4                High                   3                   6.7
+5                High                   2                   7.1
+6                High                   1                   5.0</code></pre>
+</div>
+</div>
+<p>Uso de mutate()</p>
+<p>Por otro lado, mutate() se utiliza para crear nuevas columnas o modificar las existentes dentro de un data frame. mutate() permite realizar transformaciones como cálculos, conversiones de tipos de datos, y más.</p>
+<p>Ejemplo de creación de una nueva columna con mutate():</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">mutate</span>(Estudiantes, <span class="at">Asistencia_Promedio =</span> Asistencia <span class="sc">/</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Este código crea una nueva columna llamada Asistencia_Promedio, que contiene los valores de asistencia en un formato decimal (de 0 a 1 en lugar de un porcentaje).</p>
 </div>
 <div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
-
+<p>En este ejercicio, exploraremos cómo manejar los valores faltantes (NA) en nuestros datos utilizando el paquete tidyr. Los valores faltantes son comunes en muchos conjuntos de datos y, dependiendo del contexto, debemos tratarlos de diferentes maneras, como eliminarlos, reemplazarlos o incluso imputarlos.</p>
+<p>Identificación de Valores Faltantes</p>
+<p>Antes de realizar cualquier operación, es importante identificar los valores faltantes en el conjunto de datos. En R, los valores faltantes se representan con NA. Para detectar cuántos valores faltantes hay en cada columna, podemos usar la función summarise_all() junto con is.na():</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>Food <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/Food_Production.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise_all</span>(Food, <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Food.product Land.use.change Animal.Feed Farm Processing Transport Packging
+1            0               0           0    0          0         0        0
+  Retail Total_emissions
+1      0               0
+  Eutrophying.emissions.per.1000kcal..gPO.eq.per.1000kcal.
+1                                                       10
+  Eutrophying.emissions.per.kilogram..gPO.eq.per.kilogram.
+1                                                        5
+  Eutrophying.emissions.per.100g.protein..gPO.eq.per.100.grams.protein.
+1                                                                    16
+  Freshwater.withdrawals.per.1000kcal..liters.per.1000kcal.
+1                                                        13
+  Freshwater.withdrawals.per.100g.protein..liters.per.100g.protein.
+1                                                                17
+  Freshwater.withdrawals.per.kilogram..liters.per.kilogram.
+1                                                         5
+  Greenhouse.gas.emissions.per.1000kcal..kgCO.eq.per.1000kcal.
+1                                                           10
+  Greenhouse.gas.emissions.per.100g.protein..kgCO.eq.per.100g.protein.
+1                                                                   16
+  Land.use.per.1000kcal..m..per.1000kcal.
+1                                      10
+  Land.use.per.kilogram..m..per.kilogram.
+1                                       5
+  Land.use.per.100g.protein..m..per.100g.protein.
+1                                              16
+  Scarcity.weighted.water.use.per.kilogram..liters.per.kilogram.
+1                                                              5
+  Scarcity.weighted.water.use.per.100g.protein..liters.per.100g.protein.
+1                                                                     17
+  Scarcity.weighted.water.use.per.1000kcal..liters.per.1000.kilocalories.
+1                                                                      13</code></pre>
+</div>
+</div>
+<p>Eliminar Valores Faltantes con drop_na()</p>
+<p>Una forma común de manejar los valores faltantes es eliminarlos. La función drop_na() de tidyr permite eliminar las filas que contienen valores NA en alguna de las columnas seleccionadas.</p>
+<p>Para eliminar las filas con NA en cualquier columna:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>Food_na_drop <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(Food)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Si solo queremos eliminar filas con valores faltantes en una columna específica:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>Food_drop1 <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(Food, Scarcity.weighted.water.use.per<span class="fl">.1000</span>kcal..liters.per.<span class="fl">1000.</span>kilocalories.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Rellenar Valores Faltantes con fill()</p>
+<p>En lugar de eliminar los valores faltantes, a veces preferimos reemplazarlos con un valor específico o con el valor anterior o siguiente disponible. La función fill() de tidyr es útil para este propósito.</p>
+<p>Imputación de Valores Faltantes</p>
+<p>Si decidimos que necesitamos imputar los valores faltantes con un valor específico (como la media o la mediana), podemos hacerlo utilizando mutate() junto con funciones de resumen como mean() o median().</p>
+<p>Por ejemplo, para reemplazar los valores faltantes en la columna Final_Score con la media de los valores disponibles:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>Food2 <span class="ot">&lt;-</span> <span class="fu">rename</span>(Food, <span class="st">"Scarcity1000kcal"</span> <span class="ot">=</span>   <span class="st">"Scarcity.weighted.water.use.per.1000kcal..liters.per.1000.kilocalories."</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>Food_rellenado <span class="ot">&lt;-</span> <span class="fu">mutate</span>(Food2, <span class="at">Scarcity1000kcal =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(Scarcity1000kcal), </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                                                         <span class="fu">mean</span>(Scarcity1000kcal, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                                                         Scarcity1000kcal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>Food_clean <span class="ot">&lt;-</span> Food <span class="sc">%&gt;%</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Producto =</span> Food.product,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Cambio_uso_suelo =</span> Land.use.change,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Alimento_Animal =</span> Animal.Feed,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agricultura =</span> Farm,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Procesamiento =</span> Processing,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Transporte =</span> Transport,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Empaque =</span> Packging,</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Comercio =</span> Retail,</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Emisiones_Totales =</span> Total_emissions,</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Emisiones_Eutrofizacion_1000kcal =</span> Eutrophying.emissions.per<span class="fl">.1000</span>kcal..gPO.eq.per<span class="fl">.1000</span>kcal.,</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Emisiones_Eutrofizacion_kg =</span> Eutrophying.emissions.per.kilogram..gPO.eq.per.kilogram.,</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">Emisiones_Eutrofizacion_100g_proteina =</span> Eutrophying.emissions.per<span class="fl">.100</span>g.protein..gPO.eq.per.<span class="fl">100.</span>grams.protein.,</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agua_Fresca_1000kcal =</span> Freshwater.withdrawals.per<span class="fl">.1000</span>kcal..liters.per<span class="fl">.1000</span>kcal.,</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agua_Fresca_100g_proteina =</span> Freshwater.withdrawals.per<span class="fl">.100</span>g.protein..liters.per<span class="fl">.100</span>g.protein.,</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agua_Fresca_kg =</span> Freshwater.withdrawals.per.kilogram..liters.per.kilogram.,</span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Emisiones_Gases_Efecto_Invernadero_1000kcal =</span> Greenhouse.gas.emissions.per<span class="fl">.1000</span>kcal..kgCO.eq.per<span class="fl">.1000</span>kcal.,</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Emisiones_Gases_Efecto_Invernadero_100g_proteina =</span> Greenhouse.gas.emissions.per<span class="fl">.100</span>g.protein..kgCO.eq.per<span class="fl">.100</span>g.protein.,</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uso_Suelo_1000kcal =</span> Land.use.per<span class="fl">.1000</span>kcal..m..per<span class="fl">.1000</span>kcal.,</span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uso_Suelo_kg =</span> Land.use.per.kilogram..m..per.kilogram.,</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">Uso_Suelo_100g_proteina =</span> Land.use.per<span class="fl">.100</span>g.protein..m..per<span class="fl">.100</span>g.protein.,</span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agua_Escasez_kg =</span> Scarcity.weighted.water.use.per.kilogram..liters.per.kilogram.,</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agua_Escasez_100g_proteina =</span> Scarcity.weighted.water.use.per<span class="fl">.100</span>g.protein..liters.per<span class="fl">.100</span>g.protein.,</span>
+<span id="cb39-27"><a href="#cb39-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">Agua_Escasez_1000kcal =</span> Scarcity.weighted.water.use.per<span class="fl">.1000</span>kcal..liters.per.<span class="fl">1000.</span>kilocalories.</span>
+<span id="cb39-28"><a href="#cb39-28" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>Food_clean <span class="ot">&lt;-</span> Food_clean <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Emisiones_Totales <span class="sc">&gt;</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Impacto_relativo_GEI =</span> Emisiones_Gases_Efecto_Invernadero_1000kcal <span class="sc">/</span> Emisiones_Totales)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(Food_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   21 obs. of  24 variables:
+ $ Producto                                        : chr  "Rice" "Cane Sugar" "Groundnuts" "Tofu" ...
+ $ Cambio_uso_suelo                                : num  0 1.2 0.4 1 3.1 3.1 0.1 0.2 -0.4 3.7 ...
+ $ Alimento_Animal                                 : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Agricultura                                     : num  3.6 0.5 1.4 0.5 1.5 2.1 2.1 2.3 4.3 10.4 ...
+ $ Procesamiento                                   : num  0.1 0 0.4 0.8 0.3 1.3 0.2 0.2 0.7 0.6 ...
+ $ Transporte                                      : num  0.1 0.8 0.1 0.2 0.3 0.2 0.2 0.2 0.5 0.1 ...
+ $ Empaque                                         : num  0.1 0.1 0.1 0.2 0.8 0.9 0.9 0.8 0.9 1.6 ...
+ $ Comercio                                        : num  0.1 0 0 0.3 0 0 0 0 0 0.1 ...
+ $ Emisiones_Totales                               : num  4 2.6 2.4 3 6 7.6 3.5 3.7 6 16.5 ...
+ $ Emisiones_Eutrofizacion_1000kcal                : num  9.51 4.82 2.44 NA NA ...
+ $ Emisiones_Eutrofizacion_kg                      : num  35.1 16.9 14.1 NA 11.7 ...
+ $ Emisiones_Eutrofizacion_100g_proteina           : num  49.4 NA 5.4 NA NA ...
+ $ Agua_Fresca_1000kcal                            : num  610 177 319 NA NA ...
+ $ Agua_Fresca_100g_proteina                       : num  3167 NA 708 NA NA ...
+ $ Agua_Fresca_kg                                  : num  2248 620 1852 NA 415 ...
+ $ Emisiones_Gases_Efecto_Invernadero_1000kcal     : num  1.207 0.912 0.557 NA NA ...
+ $ Emisiones_Gases_Efecto_Invernadero_100g_proteina: num  6.27 NA 1.23 NA NA ...
+ $ Uso_Suelo_1000kcal                              : num  0.76 0.581 1.571 NA NA ...
+ $ Uso_Suelo_kg                                    : num  2.8 2.04 9.11 NA 10.52 ...
+ $ Uso_Suelo_100g_proteina                         : num  3.94 NA 3.48 NA NA ...
+ $ Agua_Escasez_kg                                 : num  49576 16439 61798 NA 14888 ...
+ $ Agua_Escasez_100g_proteina                      : num  69826 NA 23605 NA NA ...
+ $ Agua_Escasez_1000kcal                           : num  13450 4683 10655 NA NA ...
+ $ Impacto_relativo_GEI                            : num  0.302 0.351 0.232 NA NA ...</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>

@@ -145,27 +145,27 @@ Elevacion <- rast("data/CRI_elv_msk.tif")
 
 ## Selección y filtrado de datos con dplyr
 
-De las bases de datos vistas nteriormente, para nuestro porximo ejercisio utilizaremos la base de datos `Students_Grading_Dataset.json`, a la cual llamaremos "Estudiantes"
+De las bases de datos vistas anteriormente, para nuestro próximo ejercicio utilizaremos la base de datos `Students_Grading_Dataset.json`, a la cual denominaremos "Estudiantes".
 
 ```{r}
 Estudiantes <- fromJSON("data/Students_Grading_Dataset.json")
 ```
 
-De esta base de datos podemos apreciar que Cada estudiante tiene su "ID", genero, sexo, Edad, Departamento, % de asistencia y Calificaciones.
+En esta base de datos, podemos observar que cada estudiante tiene asignado un ID, género, edad, departamento, porcentaje de asistencia y calificaciones.
 
 ```{r}
 str(Estudiantes)
 ```
 
-En nuestro caso queremos conocer que deparmentos y queremos filtrar una base de datos para cada uno de ellos por separado.
+En este ejercicio, queremos conocer los diferentes departamentos y filtrar la base de datos para trabajar con los datos de cada uno por separado.
 
 ```{r}
 table(Estudiantes$Department)
 ```
 
-Observamos que existen cuatro departamentos: Business, CS, Engineering y Mathematics. Siendo CS la que presenta mayor numero de estudiantes con 2022. 
+Al revisar los departamentos, encontramos que hay cuatro: Business, CS, Engineering y Mathematics, siendo CS el departamento con el mayor número de estudiantes, con un total de 2022.
 
-Si utilizamos `filter` podemos filtrar en base a un criterio que queramos.
+Podemos utilizar `filter` para filtrar los datos en función de cualquier criterio que elijamos.
 
 ```{r}
 
@@ -175,7 +175,7 @@ head(CS)
 
 ```
 
-Otra manera de filtrar es en base a un umbral, por ejemplo los estudnates con calificaciones mayores a 0.8
+Otra opción es filtrar en función de un umbral. Por ejemplo, podemos seleccionar a los estudiantes con calificaciones superiores a 80
 
 ```{r}
 
@@ -183,7 +183,7 @@ App <- filter(Estudiantes, Final_Score > 80 )
 head(App)
 ```
 
-Tambien podemos filtrar las calificaciones > 80 y del departamento "CS"
+También es posible combinar condiciones. Por ejemplo, filtrar a los estudiantes con calificaciones mayores a 80 y que pertenezcan al departamento "CS".
 
 ```{r}
 App_CS <- filter(Estudiantes, Final_Score > 80 & Department == "CS")
@@ -196,6 +196,126 @@ head(App_CS)
 
 ## Transformación de datos con mutate() y rename()
 
+En este ejercicio, continuaremos utilizando la base de datos "Estudiantes". Nos enfocaremos en transformar los datos, específicamente renombrando algunas de las variables para hacerlas más comprensibles o ajustarlas a un formato más adecuado.
+
+Uso de rename()
+
+El función rename() de dplyr se utiliza para cambiar el nombre de una o más columnas en un data frame. La sintaxis básica es la siguiente:
+
+```{r}
+Estudiantes <- rename(Estudiantes, "Nombre" =  "First_Name")
+Estudiantes <- rename(Estudiantes, "Apellido" =  "Last_Name")
+Estudiantes <- rename(Estudiantes, "Asistencia" =  "Attendance (%)")
+
+head(Estudiantes)
+```
+
+
+Uso de mutate()
+
+Por otro lado, mutate() se utiliza para crear nuevas columnas o modificar las existentes dentro de un data frame. mutate() permite realizar transformaciones como cálculos, conversiones de tipos de datos, y más.
+
+Ejemplo de creación de una nueva columna con mutate():
+
+```{r}
+Estudiantes <- mutate(Estudiantes, Asistencia_Promedio = Asistencia / 100)
+```
+
+Este código crea una nueva columna llamada Asistencia_Promedio, que contiene los valores de asistencia en un formato decimal (de 0 a 1 en lugar de un porcentaje).
+
+
 ## Manejo de valores faltantes con tidyr
+
+En este ejercicio, exploraremos cómo manejar los valores faltantes (NA) en nuestros datos utilizando el paquete tidyr. Los valores faltantes son comunes en muchos conjuntos de datos y, dependiendo del contexto, debemos tratarlos de diferentes maneras, como eliminarlos, reemplazarlos o incluso imputarlos.
+
+Identificación de Valores Faltantes
+
+Antes de realizar cualquier operación, es importante identificar los valores faltantes en el conjunto de datos. En R, los valores faltantes se representan con NA. Para detectar cuántos valores faltantes hay en cada columna, podemos usar la función summarise_all() junto con is.na():
+
+```{r}
+Food <- read.csv("data/Food_Production.csv")
+```
+
+```{r}
+summarise_all(Food, ~sum(is.na(.)))
+```
+
+Eliminar Valores Faltantes con drop_na()
+
+Una forma común de manejar los valores faltantes es eliminarlos. La función drop_na() de tidyr permite eliminar las filas que contienen valores NA en alguna de las columnas seleccionadas.
+
+Para eliminar las filas con NA en cualquier columna:
+
+```{r}
+Food_na_drop <- drop_na(Food)
+```
+
+Si solo queremos eliminar filas con valores faltantes en una columna específica:
+
+```{r}
+Food_drop1 <- drop_na(Food, Scarcity.weighted.water.use.per.1000kcal..liters.per.1000.kilocalories.)
+```
+
+Rellenar Valores Faltantes con fill()
+
+En lugar de eliminar los valores faltantes, a veces preferimos reemplazarlos con un valor específico o con el valor anterior o siguiente disponible. La función fill() de tidyr es útil para este propósito.
+
+Imputación de Valores Faltantes
+
+Si decidimos que necesitamos imputar los valores faltantes con un valor específico (como la media o la mediana), podemos hacerlo utilizando mutate() junto con funciones de resumen como mean() o median().
+
+Por ejemplo, para reemplazar los valores faltantes en la columna Final_Score con la media de los valores disponibles:
+
+```{r}
+Food2 <- rename(Food, "Scarcity1000kcal" =   "Scarcity.weighted.water.use.per.1000kcal..liters.per.1000.kilocalories.")
+
+Food_rellenado <- mutate(Food2, Scarcity1000kcal = ifelse(is.na(Scarcity1000kcal), 
+                                                         mean(Scarcity1000kcal, na.rm = TRUE), 
+                                                         Scarcity1000kcal))
+```
+
+## Uso de tuberias (%>%) o (|>)
+
+
+```{r}
+library(dplyr)
+
+Food_clean <- Food %>%
+  rename(
+    Producto = Food.product,
+    Cambio_uso_suelo = Land.use.change,
+    Alimento_Animal = Animal.Feed,
+    Agricultura = Farm,
+    Procesamiento = Processing,
+    Transporte = Transport,
+    Empaque = Packging,
+    Comercio = Retail,
+    Emisiones_Totales = Total_emissions,
+    Emisiones_Eutrofizacion_1000kcal = Eutrophying.emissions.per.1000kcal..gPO.eq.per.1000kcal.,
+    Emisiones_Eutrofizacion_kg = Eutrophying.emissions.per.kilogram..gPO.eq.per.kilogram.,
+    Emisiones_Eutrofizacion_100g_proteina = Eutrophying.emissions.per.100g.protein..gPO.eq.per.100.grams.protein.,
+    Agua_Fresca_1000kcal = Freshwater.withdrawals.per.1000kcal..liters.per.1000kcal.,
+    Agua_Fresca_100g_proteina = Freshwater.withdrawals.per.100g.protein..liters.per.100g.protein.,
+    Agua_Fresca_kg = Freshwater.withdrawals.per.kilogram..liters.per.kilogram.,
+    Emisiones_Gases_Efecto_Invernadero_1000kcal = Greenhouse.gas.emissions.per.1000kcal..kgCO.eq.per.1000kcal.,
+    Emisiones_Gases_Efecto_Invernadero_100g_proteina = Greenhouse.gas.emissions.per.100g.protein..kgCO.eq.per.100g.protein.,
+    Uso_Suelo_1000kcal = Land.use.per.1000kcal..m..per.1000kcal.,
+    Uso_Suelo_kg = Land.use.per.kilogram..m..per.kilogram.,
+    Uso_Suelo_100g_proteina = Land.use.per.100g.protein..m..per.100g.protein.,
+    Agua_Escasez_kg = Scarcity.weighted.water.use.per.kilogram..liters.per.kilogram.,
+    Agua_Escasez_100g_proteina = Scarcity.weighted.water.use.per.100g.protein..liters.per.100g.protein.,
+    Agua_Escasez_1000kcal = Scarcity.weighted.water.use.per.1000kcal..liters.per.1000.kilocalories.
+  ) 
+
+```
+
+```{r}
+
+Food_clean <- Food_clean %>%
+  filter(Emisiones_Totales > 2) %>% 
+  mutate(Impacto_relativo_GEI = Emisiones_Gases_Efecto_Invernadero_1000kcal / Emisiones_Totales)
+
+str(Food_clean)
+```
 
 :::
