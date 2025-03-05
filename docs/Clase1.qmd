@@ -6,27 +6,196 @@ editor: visual
 ---
 
 
-## Objetivo de la clase
+En esta primera clase, exploraremos Tidyverse, un conjunto de paquetes en R diseñado para la manipulación, visualización y análisis de datos de manera eficiente y estructurada. Nos enfocaremos en los conceptos fundamentales para la limpieza de datos, una etapa clave en cualquier análisis, que nos permitirá transformar datos crudos en información lista para su exploración y modelado.
 
-Conocer qué es tidyverse y por qué es útil para manipular datos en R.
-Aprender las funciones básicas de limpieza de datos con `dplyr` y `tidyr`.
 
+::: panel-tabset
 
 ## Introducción a R y tidyverse
 
-¿Qué es tidyverse? 
+¿Qué es tidyverse?
 
-Es un conjunto de paquetes diseñados para facilitar el trabajo con datos en R.
-[tidyverse](https://www.tidyverse.org/)
+El [Tidyverse](https://www.tidyverse.org/) "es una colección estructurada de paquetes de R diseñados para la ciencia de datos. Todos los paquetes comparten una filosofía de diseño subyacente, una gramática común y estructuras de datos coherentes".
+
+
+Cargar paquete
 
 ```{r}
 library(tidyverse)
 ```
+Al cargar el paquete tidyverse, aparecerá un mensaje con una lista de los paquetes principales que se están adjuntando a la sesión. Este mensaje también indica posibles conflictos entre funciones de tidyverse y otros paquetes de R.
+
+Explicación de cada sección:
+
+"Attaching core tidyverse packages"
+
+Indica que se están cargando los paquetes centrales del tidyverse, en este caso:
+dplyr: Manipulación de datos
+forcats: Manejo de factores
+ggplot2: Visualización de datos
+lubridate: Manejo de fechas y horas
+purrr: Programación funcional
+readr: Importación de datos
+stringr: Manipulación de cadenas de texto
+tibble: Estructura de datos moderna
+tidyr: Organización y limpieza de datos
+"Conflicts"
+
+Muestra funciones que están en conflicto con otras del paquete stats (incluido en R por defecto).
+
+dplyr::filter() y dplyr::lag() tienen el mismo nombre que stats::filter() y stats::lag(), por lo que al llamar filter() o lag(), R usará la versión de dplyr a menos que se especifique lo contrario.
+
+"Use the conflicted package to force all conflicts to become errors"
+
+Sugiere usar el paquete conflicted para evitar ambigüedades y hacer que R indique un error si hay conflictos en lugar de elegir automáticamente una versión de la función.
 
 ## Carga y exploración de datos
 
+En este primer ejercicio, trabajaremos con diferentes formatos de datos para aprender a importarlos correctamente en R. Exploraremos diversas estructuras de archivos y los paquetes adecuados para su lectura.
+
+Formatos de datos a importar:
+
+::: panel-tabset
+
+### 1) Excel (.xlsx)
+
+Data: Emisiones de GHG en la Producción de Alimentos
+
+Proviene de la reconocida fuente Our World in Data, específicamente del proyecto de Environmental Impacts of Food Production. Esta fuente es ampliamente respetada y utilizada en investigaciones para proporcionar datos precisos y detallados sobre diversos aspectos ambientales, incluyendo los impactos de la producción de alimentos en el medio ambiente.
+
+La tabla muestra las emisiones de CO2 equivalente (CO2e) en la producción de diferentes tipos de alimentos, tomando en cuenta las emisiones producidas por kg de alimento producido, por 100 g de proteína y 1000 kcal.
+
+Incluye variables relevantes como:
+
+Tipo de alimento: Clasificación de los alimentos analizados.
+
+Emisiones de CO2 equivalente (kg CO2e): La cantidad de emisiones de CO2 equivalente generada por la producción de cada tipo de alimento.
+
+```{r}
+library(readxl)
+
+Capstone <- read_excel("data/Capstone_IA_R_V3.xlsx")
+```
+
+
+
+### CSV (valores separados por comas)
+
+El conjunto de datos contiene un registro de cada impacto con vida silvestre reportado en aeronaves militares, comerciales o civiles entre 1990 y 2015. Cada fila incluye la fecha del incidente, el operador de la aeronave, la marca y modelo de la aeronave, la marca y modelo del motor, el nombre y ubicación del aeropuerto, el nombre y la cantidad de la especie involucrada, y los daños sufridos por la aeronave.
+
+La base de datos de impactos con vida silvestre fue compilada a partir de informes recibidos de aeropuertos, aerolíneas y pilotos, y publicada por la Administración Federal de Aviación (FAA).
+
+```{r}
+AccidentesAereos <- read.csv("data/airkraf_accident.csv")
+```
+
+
+### CSV delimitado por punto y coma (;)
+
+La base de datos fue recopilada en Yoro, Honduras, y registra la abundancia de aves en una zona de producción de café. Incluye algunas de las variables medidas en campo, así como la ubicación de los sitios de muestreo.
+
+```{r}
+Habitat <- read.csv2("data/AvesHabitat.csv")
+```
+
+
+
+### TXT (archivo de texto plano)
+
+La base de datos bettles.txt. Estos datos muestran las abundancias de escarabajos en tres tipos de hábitat en el Reino Unido. Hay 6 réplicas para cada hábitat (Wood, Grass, Edge).
+
+```{r}
+Escarabajos <- read.table("data/bettles.txt")
+```
+
+### JSON (formato de intercambio de datos)
+
+Esta base de datos muestra las calificaciones de varios estudiantes.
+
+```{r}
+library(jsonlite)
+
+Estudiantes <- fromJSON("data/Students_Grading_Dataset.json")
+```
+
+
+### Shapefile (datos espaciales .gpkg)
+
+Este archivo contiene registros del Guardabarranco Centroamérica.
+
+```{r}
+library(sf)
+
+Momotido <- read_sf("data/Momot.gpkg")
+```
+
+### Raster (datos espaciales en formato de imagen)
+
+Capa raster que representa la elevación sobre el nivel del mar en Costa Rica.
+
+```{r}
+library(terra)
+
+Elevacion <- rast("data/CRI_elv_msk.tif")
+
+```
+
+
+:::
+
 ## Selección y filtrado de datos con dplyr
+
+De las bases de datos vistas nteriormente, para nuestro porximo ejercisio utilizaremos la base de datos `Students_Grading_Dataset.json`, a la cual llamaremos "Estudiantes"
+
+```{r}
+Estudiantes <- fromJSON("data/Students_Grading_Dataset.json")
+```
+
+De esta base de datos podemos apreciar que Cada estudiante tiene su "ID", genero, sexo, Edad, Departamento, % de asistencia y Calificaciones.
+
+```{r}
+str(Estudiantes)
+```
+
+En nuestro caso queremos conocer que deparmentos y queremos filtrar una base de datos para cada uno de ellos por separado.
+
+```{r}
+table(Estudiantes$Department)
+```
+
+Observamos que existen cuatro departamentos: Business, CS, Engineering y Mathematics. Siendo CS la que presenta mayor numero de estudiantes con 2022. 
+
+Si utilizamos `filter` podemos filtrar en base a un criterio que queramos.
+
+```{r}
+
+CS <- filter(Estudiantes, Department == "CS")
+
+head(CS)
+
+```
+
+Otra manera de filtrar es en base a un umbral, por ejemplo los estudnates con calificaciones mayores a 0.8
+
+```{r}
+
+App <- filter(Estudiantes, Final_Score > 80 )
+head(App)
+```
+
+Tambien podemos filtrar las calificaciones > 80 y del departamento "CS"
+
+```{r}
+App_CS <- filter(Estudiantes, Final_Score > 80 & Department == "CS")
+
+head(App_CS)
+
+```
+
+
 
 ## Transformación de datos con mutate() y rename()
 
 ## Manejo de valores faltantes con tidyr
+
+:::

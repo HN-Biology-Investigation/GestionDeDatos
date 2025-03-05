@@ -103,14 +103,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="objetivo-de-la-clase" class="level2">
-<h2 class="anchored" data-anchor-id="objetivo-de-la-clase">Objetivo de la clase</h2>
-<p>Conocer qué es tidyverse y por qué es útil para manipular datos en R. Aprender las funciones básicas de limpieza de datos con <code>dplyr</code> y <code>tidyr</code>.</p>
-</section>
-<section id="introducción-a-r-y-tidyverse" class="level2">
-<h2 class="anchored" data-anchor-id="introducción-a-r-y-tidyverse">Introducción a R y tidyverse</h2>
+<p>En esta primera clase, exploraremos Tidyverse, un conjunto de paquetes en R diseñado para la manipulación, visualización y análisis de datos de manera eficiente y estructurada. Nos enfocaremos en los conceptos fundamentales para la limpieza de datos, una etapa clave en cualquier análisis, que nos permitirá transformar datos crudos en información lista para su exploración y modelado.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Introducción a R y tidyverse</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Carga y exploración de datos</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Selección y filtrado de datos con dplyr</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Transformación de datos con mutate() y rename()</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Manejo de valores faltantes con tidyr</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <p>¿Qué es tidyverse?</p>
-<p>Es un conjunto de paquetes diseñados para facilitar el trabajo con datos en R. <a href="https://www.tidyverse.org/">tidyverse</a></p>
+<p>El <a href="https://www.tidyverse.org/">Tidyverse</a> “es una colección estructurada de paquetes de R diseñados para la ciencia de datos. Todos los paquetes comparten una filosofía de diseño subyacente, una gramática común y estructuras de datos coherentes”.</p>
+<p>Cargar paquete</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -126,19 +126,304 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 </div>
-</section>
-<section id="carga-y-exploración-de-datos" class="level2">
-<h2 class="anchored" data-anchor-id="carga-y-exploración-de-datos">Carga y exploración de datos</h2>
-</section>
-<section id="selección-y-filtrado-de-datos-con-dplyr" class="level2">
-<h2 class="anchored" data-anchor-id="selección-y-filtrado-de-datos-con-dplyr">Selección y filtrado de datos con dplyr</h2>
-</section>
-<section id="transformación-de-datos-con-mutate-y-rename" class="level2">
-<h2 class="anchored" data-anchor-id="transformación-de-datos-con-mutate-y-rename">Transformación de datos con mutate() y rename()</h2>
-</section>
-<section id="manejo-de-valores-faltantes-con-tidyr" class="level2">
-<h2 class="anchored" data-anchor-id="manejo-de-valores-faltantes-con-tidyr">Manejo de valores faltantes con tidyr</h2>
-</section>
+<p>Al cargar el paquete tidyverse, aparecerá un mensaje con una lista de los paquetes principales que se están adjuntando a la sesión. Este mensaje también indica posibles conflictos entre funciones de tidyverse y otros paquetes de R.</p>
+<p>Explicación de cada sección:</p>
+<p>“Attaching core tidyverse packages”</p>
+<p>Indica que se están cargando los paquetes centrales del tidyverse, en este caso: dplyr: Manipulación de datos forcats: Manejo de factores ggplot2: Visualización de datos lubridate: Manejo de fechas y horas purrr: Programación funcional readr: Importación de datos stringr: Manipulación de cadenas de texto tibble: Estructura de datos moderna tidyr: Organización y limpieza de datos “Conflicts”</p>
+<p>Muestra funciones que están en conflicto con otras del paquete stats (incluido en R por defecto).</p>
+<p>dplyr::filter() y dplyr::lag() tienen el mismo nombre que stats::filter() y stats::lag(), por lo que al llamar filter() o lag(), R usará la versión de dplyr a menos que se especifique lo contrario.</p>
+<p>“Use the conflicted package to force all conflicts to become errors”</p>
+<p>Sugiere usar el paquete conflicted para evitar ambigüedades y hacer que R indique un error si hay conflictos en lugar de elegir automáticamente una versión de la función.</p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>En este primer ejercicio, trabajaremos con diferentes formatos de datos para aprender a importarlos correctamente en R. Exploraremos diversas estructuras de archivos y los paquetes adecuados para su lectura.</p>
+<p>Formatos de datos a importar:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">1) Excel (.xlsx)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">CSV (valores separados por comas)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">CSV delimitado por punto y coma (;)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">TXT (archivo de texto plano)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href="">JSON (formato de intercambio de datos)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false" href="">Shapefile (datos espaciales .gpkg)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false" href="">Raster (datos espaciales en formato de imagen)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Data: Emisiones de GHG en la Producción de Alimentos</p>
+<p>Proviene de la reconocida fuente Our World in Data, específicamente del proyecto de Environmental Impacts of Food Production. Esta fuente es ampliamente respetada y utilizada en investigaciones para proporcionar datos precisos y detallados sobre diversos aspectos ambientales, incluyendo los impactos de la producción de alimentos en el medio ambiente.</p>
+<p>La tabla muestra las emisiones de CO2 equivalente (CO2e) en la producción de diferentes tipos de alimentos, tomando en cuenta las emisiones producidas por kg de alimento producido, por 100 g de proteína y 1000 kcal.</p>
+<p>Incluye variables relevantes como:</p>
+<p>Tipo de alimento: Clasificación de los alimentos analizados.</p>
+<p>Emisiones de CO2 equivalente (kg CO2e): La cantidad de emisiones de CO2 equivalente generada por la producción de cada tipo de alimento.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Capstone <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/Capstone_IA_R_V3.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>El conjunto de datos contiene un registro de cada impacto con vida silvestre reportado en aeronaves militares, comerciales o civiles entre 1990 y 2015. Cada fila incluye la fecha del incidente, el operador de la aeronave, la marca y modelo de la aeronave, la marca y modelo del motor, el nombre y ubicación del aeropuerto, el nombre y la cantidad de la especie involucrada, y los daños sufridos por la aeronave.</p>
+<p>La base de datos de impactos con vida silvestre fue compilada a partir de informes recibidos de aeropuertos, aerolíneas y pilotos, y publicada por la Administración Federal de Aviación (FAA).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>AccidentesAereos <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/airkraf_accident.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>La base de datos fue recopilada en Yoro, Honduras, y registra la abundancia de aves en una zona de producción de café. Incluye algunas de las variables medidas en campo, así como la ubicación de los sitios de muestreo.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Habitat <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"data/AvesHabitat.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>La base de datos bettles.txt. Estos datos muestran las abundancias de escarabajos en tres tipos de hábitat en el Reino Unido. Hay 6 réplicas para cada hábitat (Wood, Grass, Edge).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Escarabajos <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data/bettles.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<p>Esta base de datos muestra las calificaciones de varios estudiantes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'jsonlite'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    flatten</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/Students_Grading_Dataset.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<p>Este archivo contiene registros del Guardabarranco Centroamérica.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Linking to GEOS 3.11.2, GDAL 3.8.2, PROJ 9.3.1; sf_use_s2() is TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Momotido <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">"data/Momot.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-7-tab">
+<p>Capa raster que representa la elevación sobre el nivel del mar en Costa Rica.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>terra 1.7.71</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'terra'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:tidyr':
+
+    extract</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Elevacion <span class="ot">&lt;-</span> <span class="fu">rast</span>(<span class="st">"data/CRI_elv_msk.tif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<p>De las bases de datos vistas nteriormente, para nuestro porximo ejercisio utilizaremos la base de datos <code>Students_Grading_Dataset.json</code>, a la cual llamaremos “Estudiantes”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Estudiantes <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"data/Students_Grading_Dataset.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>De esta base de datos podemos apreciar que Cada estudiante tiene su “ID”, genero, sexo, Edad, Departamento, % de asistencia y Calificaciones.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(Estudiantes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   5000 obs. of  23 variables:
+ $ Student_ID                : chr  "S1000" "S1001" "S1002" "S1003" ...
+ $ First_Name                : chr  "Omar" "Maria" "Ahmed" "Omar" ...
+ $ Last_Name                 : chr  "Williams" "Brown" "Jones" "Williams" ...
+ $ Email                     : chr  "student0@university.com" "student1@university.com" "student2@university.com" "student3@university.com" ...
+ $ Gender                    : chr  "Female" "Male" "Male" "Female" ...
+ $ Age                       : int  22 18 24 24 23 21 24 19 21 22 ...
+ $ Department                : chr  "Engineering" "Engineering" "Business" "Mathematics" ...
+ $ Attendance (%)            : num  52.3 97.3 57.2 95.2 54.2 ...
+ $ Midterm_Score             : num  55 97.2 67 47.8 46.6 ...
+ $ Final_Score               : num  57.8 45.8 93.7 80.6 78.9 ...
+ $ Assignments_Avg           : num  84.2 NA 67.7 66.1 96.8 ...
+ $ Quizzes_Avg               : num  74.1 94.2 85.7 93.5 83.7 ...
+ $ Participation_Score       : num  3.99 8.32 5.05 6.54 5.97 6.38 2.3 3.73 0.51 5.88 ...
+ $ Projects_Score            : num  85.9 55.6 73.8 92.1 68.4 ...
+ $ Total_Score               : num  56.1 50.6 70.3 61.6 66.1 ...
+ $ Grade                     : chr  "F" "A" "D" "A" ...
+ $ Study_Hours_per_Week      : num  6.2 19 20.7 24.8 15.4 8.5 21.3 27.3 8 9.6 ...
+ $ Extracurricular_Activities: chr  "No" "No" "No" "Yes" ...
+ $ Internet_Access_at_Home   : chr  "Yes" "Yes" "Yes" "Yes" ...
+ $ Parent_Education_Level    : chr  "High School" "None" "Master's" "High School" ...
+ $ Family_Income_Level       : chr  "Medium" "Medium" "Low" "High" ...
+ $ Stress_Level (1-10)       : int  5 4 6 3 2 1 5 4 9 10 ...
+ $ Sleep_Hours_per_Night     : num  4.7 9 6.2 6.7 7.1 5 6.4 4.3 8.8 6.4 ...</code></pre>
+</div>
+</div>
+<p>En nuestro caso queremos conocer que deparmentos y queremos filtrar una base de datos para cada uno de ellos por separado.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(Estudiantes<span class="sc">$</span>Department)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   Business          CS Engineering Mathematics 
+       1006        2022        1469         503 </code></pre>
+</div>
+</div>
+<p>Observamos que existen cuatro departamentos: Business, CS, Engineering y Mathematics. Siendo CS la que presenta mayor numero de estudiantes con 2022.</p>
+<p>Si utilizamos <code>filter</code> podemos filtrar en base a un criterio que queramos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>CS <span class="ot">&lt;-</span> <span class="fu">filter</span>(Estudiantes, Department <span class="sc">==</span> <span class="st">"CS"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(CS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Student_ID First_Name Last_Name                    Email Gender Age
+1      S1004       John     Smith  student4@university.com Female  23
+2      S1008       Omar     Smith  student8@university.com Female  21
+3      S1010       John     Smith student10@university.com Female  23
+4      S1015      Ahmed     Jones student15@university.com   Male  18
+5      S1016      Maria     Jones student16@university.com Female  21
+6      S1018       Liam     Jones student18@university.com   Male  20
+  Department Attendance (%) Midterm_Score Final_Score Assignments_Avg
+1         CS          54.18         46.59       78.89           96.85
+2         CS          85.97         84.42       90.87           57.05
+3         CS          85.72         83.52       97.43           67.29
+4         CS          86.72         63.93       91.07           81.00
+5         CS          75.05         90.11       56.81           67.34
+6         CS          65.14         40.68       42.28           50.34
+  Quizzes_Avg Participation_Score Projects_Score Total_Score Grade
+1       83.70                5.97          68.42       66.13     F
+2       56.33                0.51          94.01       95.62     A
+3       76.95                4.59          97.62       58.25     A
+4       66.88                6.14          77.57       52.37     A
+5       67.59                8.48          63.16       73.21     F
+6       94.28                9.44          56.29       65.33     B
+  Study_Hours_per_Week Extracurricular_Activities Internet_Access_at_Home
+1                 15.4                        Yes                     Yes
+2                  8.0                         No                      No
+3                 13.2                         No                     Yes
+4                 25.3                         No                     Yes
+5                 29.7                         No                     Yes
+6                 17.4                         No                     Yes
+  Parent_Education_Level Family_Income_Level Stress_Level (1-10)
+1            High School                High                   2
+2             Bachelor's                 Low                   9
+3            High School                 Low                   1
+4                   None                High                   2
+5                   None                 Low                   3
+6                   None              Medium                   9
+  Sleep_Hours_per_Night
+1                   7.1
+2                   8.8
+3                   4.1
+4                   8.6
+5                   6.1
+6                   4.8</code></pre>
+</div>
+</div>
+<p>Otra manera de filtrar es en base a un umbral, por ejemplo los estudnates con calificaciones mayores a 0.8</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>App <span class="ot">&lt;-</span> <span class="fu">filter</span>(Estudiantes, Final_Score <span class="sc">&gt;</span> <span class="dv">80</span> )</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(App)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Student_ID First_Name Last_Name                    Email Gender Age
+1      S1002      Ahmed     Jones  student2@university.com   Male  24
+2      S1003       Omar  Williams  student3@university.com Female  24
+3      S1006      Ahmed     Jones  student6@university.com   Male  24
+4      S1008       Omar     Smith  student8@university.com Female  21
+5      S1009       Sara     Smith  student9@university.com Female  22
+6      S1010       John     Smith student10@university.com Female  23
+   Department Attendance (%) Midterm_Score Final_Score Assignments_Avg
+1    Business          57.19         67.05       93.68           67.70
+2 Mathematics          95.15         47.79       80.63           66.06
+3    Business          57.60         66.26       89.07           84.52
+4          CS          85.97         84.42       90.87           57.05
+5 Engineering          64.01         87.96       98.47           96.98
+6          CS          85.72         83.52       97.43           67.29
+  Quizzes_Avg Participation_Score Projects_Score Total_Score Grade
+1       85.70                5.05          73.79       70.30     D
+2       93.51                6.54          92.12       61.63     A
+3       98.40                2.30          93.65       83.21     F
+4       56.33                0.51          94.01       95.62     A
+5       55.63                5.88          78.60       84.99     A
+6       76.95                4.59          97.62       58.25     A
+  Study_Hours_per_Week Extracurricular_Activities Internet_Access_at_Home
+1                 20.7                         No                     Yes
+2                 24.8                        Yes                     Yes
+3                 21.3                         No                     Yes
+4                  8.0                         No                      No
+5                  9.6                         No                     Yes
+6                 13.2                         No                     Yes
+  Parent_Education_Level Family_Income_Level Stress_Level (1-10)
+1               Master's                 Low                   6
+2            High School                High                   3
+3                   &lt;NA&gt;                 Low                   5
+4             Bachelor's                 Low                   9
+5                   None              Medium                  10
+6            High School                 Low                   1
+  Sleep_Hours_per_Night
+1                   6.2
+2                   6.7
+3                   6.4
+4                   8.8
+5                   6.4
+6                   4.1</code></pre>
+</div>
+</div>
+<p>Tambien podemos filtrar las calificaciones &gt; 80 y del departamento “CS”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>App_CS <span class="ot">&lt;-</span> <span class="fu">filter</span>(Estudiantes, Final_Score <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">&amp;</span> Department <span class="sc">==</span> <span class="st">"CS"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(App_CS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Student_ID First_Name Last_Name                    Email Gender Age
+1      S1008       Omar     Smith  student8@university.com Female  21
+2      S1010       John     Smith student10@university.com Female  23
+3      S1015      Ahmed     Jones student15@university.com   Male  18
+4      S1023       Liam  Williams student23@university.com Female  23
+5      S1032      Maria     Smith student32@university.com Female  21
+6      S1036      Maria     Davis student36@university.com Female  18
+  Department Attendance (%) Midterm_Score Final_Score Assignments_Avg
+1         CS          85.97         84.42       90.87           57.05
+2         CS          85.72         83.52       97.43           67.29
+3         CS          86.72         63.93       91.07           81.00
+4         CS          83.63         50.85       81.72           58.58
+5         CS             NA         61.59       98.60           93.06
+6         CS          71.96         47.46       86.10           56.84
+  Quizzes_Avg Participation_Score Projects_Score Total_Score Grade
+1       56.33                0.51          94.01       95.62     A
+2       76.95                4.59          97.62       58.25     A
+3       66.88                6.14          77.57       52.37     A
+4       65.54                4.48          89.61       88.63     D
+5       61.09                8.21          55.65       51.99     D
+6       63.17                6.67          77.85       81.78     F
+  Study_Hours_per_Week Extracurricular_Activities Internet_Access_at_Home
+1                  8.0                         No                      No
+2                 13.2                         No                     Yes
+3                 25.3                         No                     Yes
+4                 18.5                         No                     Yes
+5                 28.9                         No                     Yes
+6                 12.9                         No                     Yes
+  Parent_Education_Level Family_Income_Level Stress_Level (1-10)
+1             Bachelor's                 Low                   9
+2            High School                 Low                   1
+3                   None                High                   2
+4               Master's                 Low                   1
+5                   None              Medium                   9
+6             Bachelor's                 Low                  10
+  Sleep_Hours_per_Night
+1                   8.8
+2                   4.1
+3                   8.6
+4                   8.6
+5                   4.4
+6                   8.8</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+
+</div>
+<div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
+
+</div>
+</div>
+</div>
 
 </main>
 <!-- /main column -->
