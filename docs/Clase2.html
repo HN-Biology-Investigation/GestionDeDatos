@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -69,23 +103,133 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="filtración-avanzada-de-datos-con-dplyr" class="level2">
-<h2 class="anchored" data-anchor-id="filtración-avanzada-de-datos-con-dplyr">Filtración avanzada de datos con dplyr</h2>
-<p>Uso de operadores lógicos (&gt;, &lt;, ==, !=, &amp;, |)</p>
-<p>Filtrado de múltiples condiciones.</p>
-<p>Uso de between(), filter_if(), y filter_at().</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Filtración avanzada de datos con dplyr</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Reestructuración de datos con tidyr</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Uso de group_by() y summarise</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Transformación entre formato ancho y formato largo</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Cargar paquete</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<p>Cargar base de datos</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Accidentes <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/airkraf_accident.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="uso-de-operadores-lógicos" class="level3">
+<h3 class="anchored" data-anchor-id="uso-de-operadores-lógicos">Uso de operadores lógicos</h3>
+<p>Los operadores lógicos en R permiten realizar comparaciones y filtrar datos de manera eficiente.</p>
+<p>Los principales operadores son:</p>
+<ul>
+<li><code>&gt;</code> (mayor que)</li>
+<li><code>&lt;</code> (menor que)</li>
+<li><code>==</code> (igual a)</li>
+<li><code>!=</code> (diferente de)</li>
+<li><code>&amp;</code> (AND lógico, ambas condiciones deben cumplirse)</li>
+<li><code>|</code> (OR lógico, al menos una condición debe cumplirse)</li>
+</ul>
+<p>Filtrar accidentes en los que hubo daño en el radomo o en el parabrisas</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>accidentes_filtrados <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Radome.Damage <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> Windshield.Damage <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>accidentes_filtrados2 <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Radome.Damage <span class="sc">!=</span> <span class="dv">1</span> <span class="sc">|</span> Windshield.Damage <span class="sc">!=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>accidentes_filtrados2 <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Radome.Damage <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> Windshield.Damage <span class="sc">==</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="reestructuración-de-datos-con-tidyr" class="level2">
-<h2 class="anchored" data-anchor-id="reestructuración-de-datos-con-tidyr">Reestructuración de datos con tidyr</h2>
-<p>separate(): Dividir columnas en múltiples variables. unite(): Unir múltiples columnas en una sola.</p>
+<section id="filtrado-de-múltiples-condiciones." class="level3">
+<h3 class="anchored" data-anchor-id="filtrado-de-múltiples-condiciones.">Filtrado de múltiples condiciones.</h3>
+<p>Accidentes en 1990 con daños en el motor 1 o 2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>accidentes_1990_motor <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Incident.Year <span class="sc">==</span> <span class="dv">1990</span> <span class="sc">&amp;</span> (Engine1.Damage <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> Engine2.Damage <span class="sc">==</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="uso-de-group_by-y-summarise" class="level2">
-<h2 class="anchored" data-anchor-id="uso-de-group_by-y-summarise">Uso de group_by() y summarise</h2>
+<section id="uso-de-between-filter_if-y-filter_at." class="level3">
+<h3 class="anchored" data-anchor-id="uso-de-between-filter_if-y-filter_at.">Uso de between(), filter_if(), y filter_at().</h3>
+<ul>
+<li><code>between(x, a, b)</code>: Es una forma más legible de escribir <code>x &gt;= a &amp; x &lt;= b</code>.</li>
+<li><code>filter_if()</code>: Filtra según condiciones aplicadas a columnas numéricas o categóricas.</li>
+<li><code>filter_at()</code>: Permite aplicar una misma condición a múltiples columnas.</li>
+</ul>
+<p>Filtrar accidentes ocurridos entre 1995 y 2010 usando <code>between()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>accidentes_2000_2010 <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">between</span>(Incident.Year, <span class="dv">2000</span>, <span class="dv">2010</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Filtrar filas donde haya al menos un valor mayor que 0 en las columnas numericas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>accidentes_con_daños <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_if</span>(is.numeric, <span class="fu">any_vars</span>(. <span class="sc">&gt;</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Filtrar filas donde haya al menos un valor mayor que 0 en las columnas relacionadas con daños.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>accidentes_multiples_daños <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_at</span>(<span class="fu">vars</span>(<span class="fu">contains</span>(<span class="st">"Damage"</span>)), <span class="fu">any_vars</span>(. <span class="sc">&gt;</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="transformación-entre-formato-ancho-y-formato-largo" class="level2">
-<h2 class="anchored" data-anchor-id="transformación-entre-formato-ancho-y-formato-largo">Transformación entre formato ancho y formato largo</h2>
-<p>pivot_longer() y pivot_wider()</p>
-</section>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><code>separate()</code>: Dividir columnas en múltiples variables</p>
+<p>Se usa para separar una columna en varias.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Accidentes <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(Airport, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Airport.Name"</span>, <span class="st">"Airport.Type"</span>), <span class="at">sep =</span> <span class="st">"/"</span>, <span class="at">extra =</span> <span class="st">"merge"</span>, <span class="at">fill =</span> <span class="st">"right"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>unite()</code>: Unir múltiples columnas en una sola</p>
+<p>Sirve para combinar varias columnas en una sola.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Accidentes_date <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">"Incident.Date"</span>, <span class="fu">c</span>(Incident.Year, Incident.Month, Incident.Day), <span class="at">sep =</span> <span class="st">"-"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>Se usan para calcular estadísticas agrupadas.</p>
+<p>Contar accidentes por año</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>accidentes_por_year <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Incident.Year) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Num_Accidentes =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Promedio de daños por año</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>promedio_damage <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Incident.Year) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Promedio_damage =</span> <span class="fu">mean</span>(Radome.Damage <span class="sc">+</span> Windshield.Damage, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p><code>pivot_longer()</code>: Convertir datos de ancho a largo</p>
+<p>Convierte múltiples columnas en dos: una con los nombres originales y otra con los valores.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>accidentes_largo <span class="ot">&lt;-</span> Accidentes <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> Aircraft.Damage<span class="sc">:</span>Engine3.Damage , <span class="at">names_to =</span> <span class="st">"Tipo_Damage"</span>, <span class="at">values_to =</span> <span class="st">"Valor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>pivot_wider()</code>: Convertir datos de largo a ancho</p>
+<p>Convierte valores de una columna en nuevas columnas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>accidentes_ancho <span class="ot">&lt;-</span> accidentes_largo <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Tipo_Damage, <span class="at">values_from =</span> Valor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
 
 </main>
 <!-- /main column -->

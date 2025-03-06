@@ -5,21 +5,160 @@ format: html
 editor: visual
 ---
 
+::: panel-tabset
+
 ## Filtración avanzada de datos con dplyr
 
-Uso de operadores lógicos (>, <, ==, !=, &, |)
 
-Filtrado de múltiples condiciones.
+Cargar paquete
 
-Uso de between(), filter_if(), y filter_at().
+```{r}
+library(tidyverse)
+```
+
+Cargar base de datos
+
+```{r}
+
+Accidentes <- read.csv("data/airkraf_accident.csv")
+```
+
+
+### Uso de operadores lógicos 
+
+Los operadores lógicos en R permiten realizar comparaciones y filtrar datos de manera eficiente. 
+
+Los principales operadores son:
+
+- `>` (mayor que)
+- `<` (menor que)
+- `==` (igual a)
+- `!=` (diferente de)
+- `&` (AND lógico, ambas condiciones deben cumplirse)
+- `|` (OR lógico, al menos una condición debe cumplirse)
+
+Filtrar accidentes en los que hubo daño en el radomo o en el parabrisas
+
+```{r}
+accidentes_filtrados <- Accidentes %>%
+  filter(Radome.Damage == 1 | Windshield.Damage == 1)
+```
+
+```{r}
+accidentes_filtrados2 <- Accidentes %>%
+  filter(Radome.Damage != 1 | Windshield.Damage != 1)
+```
+
+```{r}
+accidentes_filtrados2 <- Accidentes %>%
+  filter(Radome.Damage == 1 & Windshield.Damage == 1)
+```
+
+
+
+
+### Filtrado de múltiples condiciones.
+
+Accidentes en 1990 con daños en el motor 1 o 2
+
+```{r}
+accidentes_1990_motor <- Accidentes %>%
+  filter(Incident.Year == 1990 & (Engine1.Damage == 1 | Engine2.Damage == 1))
+```
+
+
+### Uso de between(), filter_if(), y filter_at().
+
+- `between(x, a, b)`: Es una forma más legible de escribir `x >= a & x <= b`.
+- `filter_if()`: Filtra según condiciones aplicadas a columnas numéricas o categóricas.
+- `filter_at()`: Permite aplicar una misma condición a múltiples columnas.
+
+Filtrar accidentes ocurridos entre 1995 y 2010 usando `between()`.
+
+```{r}
+accidentes_2000_2010 <- Accidentes %>%
+  filter(between(Incident.Year, 2000, 2010))
+```
+
+Filtrar filas donde haya al menos un valor mayor que 0 en las columnas numericas.
+
+```{r}
+accidentes_con_daños <- Accidentes %>%
+  filter_if(is.numeric, any_vars(. > 0))
+```
+
+Filtrar filas donde haya al menos un valor mayor que 0 en las columnas relacionadas con daños.
+
+```{r}
+accidentes_multiples_daños <- Accidentes %>%
+  filter_at(vars(contains("Damage")), any_vars(. > 0))
+```
+
 
 ## Reestructuración de datos con tidyr
 
-separate(): Dividir columnas en múltiples variables.
-unite(): Unir múltiples columnas en una sola.
+
+`separate()`: Dividir columnas en múltiples variables
+
+Se usa para separar una columna en varias.
+
+```{r}
+Accidentes <- Accidentes %>%
+  separate(Airport, into = c("Airport.Name", "Airport.Type"), sep = "/", extra = "merge", fill = "right")
+```
+
+
+`unite()`: Unir múltiples columnas en una sola
+
+Sirve para combinar varias columnas en una sola.
+
+```{r}
+Accidentes_date <- Accidentes %>%
+  unite("Incident.Date", c(Incident.Year, Incident.Month, Incident.Day), sep = "-")
+```
+
 
 ## Uso de group_by() y summarise
 
+Se usan para calcular estadísticas agrupadas.
+
+Contar accidentes por año
+
+```{r}
+accidentes_por_year <- Accidentes %>%
+  group_by(Incident.Year) %>%
+  summarise(Num_Accidentes = n())
+```
+
+Promedio de daños por año
+
+```{r}
+promedio_damage <- Accidentes %>%
+  group_by(Incident.Year) %>%
+  summarise(Promedio_damage = mean(Radome.Damage + Windshield.Damage, na.rm = TRUE))
+```
+
+
 ## Transformación entre formato ancho y formato largo
 
-pivot_longer() y pivot_wider()
+`pivot_longer()`: Convertir datos de ancho a largo
+
+Convierte múltiples columnas en dos: una con los nombres originales y otra con los valores.
+
+```{r}
+accidentes_largo <- Accidentes %>%
+  pivot_longer(cols = Aircraft.Damage:Engine3.Damage , names_to = "Tipo_Damage", values_to = "Valor")
+```
+
+
+`pivot_wider()`: Convertir datos de largo a ancho
+
+Convierte valores de una columna en nuevas columnas.
+
+```{r}
+accidentes_ancho <- accidentes_largo %>%
+  pivot_wider(names_from = Tipo_Damage, values_from = Valor)
+```
+
+
+:::
