@@ -47,17 +47,18 @@ Quarto es la evolución de `RMarkdown` que permite crear documentos, libros y da
 
 ## Generación de reportes automatizados
 
-Podemos generar reportes con tablas y gráficos interactivos:
+Podemos generar reportes con tablas y gráficos
+
 
 ```{r}
-library(ggplot2)
 
 Trafico %>% 
   ggplot(aes(x = Sexo, fill = Resultado.toxicolóxico)) +
   geom_bar() +
   theme_minimal() +
   labs(title = "Distribución de Resultados Toxicológicos por Sexo")
-```
+```  
+
 
 Este gráfico muestra la distribución de los resultados toxicológicos según el sexo de los involucrados en accidentes de tráfico.
 
