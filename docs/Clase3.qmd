@@ -5,16 +5,104 @@ format: html
 editor: visual
 ---
 
+
+::: panel-tabset
+
+
+## Cargar paquete y base de datos
+
+```{r}
+library(tidyverse)
+
+covid19 <- read.csv("data/covid_19_clean_complete_p1.csv")
+day_wise <- read.csv("data/day_wise_p1.csv")
+grouped <- read.csv("data/full_grouped_p1.csv")
+worldometer <- read.csv("data/worldometer_data_p1.csv")
+```
+
+
+
 ## Unión de conjuntos de datos con dplyr
 
-Tipos de uniones: left_join(), right_join(), inner_join(), full_join(), semi_join(), anti_join().
+En esta sección, exploraremos cómo unir conjuntos de datos utilizando `dplyr`. Las funciones más utilizadas para unir tablas son:
+- `left_join()`: Mantiene todas las filas del primer dataset y agrega coincidencias del segundo.
+- `right_join()`: Mantiene todas las filas del segundo dataset y agrega coincidencias del primero.
+- `inner_join()`: Mantiene solo las filas con coincidencias en ambos datasets.
+- `full_join()`: Mantiene todas las filas de ambos datasets.
+- `semi_join()`: Mantiene solo las filas del primer dataset que tienen coincidencias en el segundo.
+- `anti_join()`: Mantiene solo las filas del primer dataset que **no** tienen coincidencias en el segundo.
 
-Uso de bind_rows() y bind_cols().
+**Ejemplo de `left_join()`:**
+
+```{r}
+covid19 <- covid19 %>% 
+  left_join(worldometer, by = "Country.Region" )
+```
+
+**Uso de `bind_rows()` y `bind_cols()`:**
+
+- `bind_rows()`: Une datasets apilando filas.
+- `bind_cols()`: Une datasets agregando columnas.
+
+```{r}
+combined_data <- covid19 %>% 
+  bind_rows(grouped)
+```
+
+---
 
 ## Introducción a manejo de fechas con lubridate
 
-Conversión de fechas con ymd(), mdy(), dmy()
+El paquete `lubridate` facilita la manipulación de fechas en R. Algunas funciones clave incluyen:
+- `ymd()`: Convierte una fecha en formato Año-Mes-Día.
+- `mdy()`: Convierte una fecha en formato Mes-Día-Año.
+- `dmy()`: Convierte una fecha en formato Día-Mes-Año.
 
-Extracción de componentes: día, mes, año, hora, minutos
+**Ejemplo de conversión de fecha:**
+
+```{r}
+library(lubridate)
+
+day_wise <- day_wise %>% 
+  mutate(Date = ymd(Date))
+```
+
+### **Extracción de componentes de la fecha**
+
+Podemos extraer el día, mes y año de una variable de fecha.
+
+```{r}
+day_wise <- day_wise %>% 
+  mutate(
+    Year = year(Date),
+    Month = month(Date),
+    Day = day(Date)
+  )
+```
+
+Si la fecha incluye hora y minutos, también podemos extraerlos:
+
+```{r}
+day_wise <- day_wise %>% 
+  mutate(
+    Hour = hour(Date),
+    Minute = minute(Date)
+  )
+```
+
+---
 
 ## Unión de datos con fechas y formatos de tiempo
+
+Para unir datasets basados en fechas, es crucial asegurarse de que las columnas tengan el mismo formato.
+
+**Ejemplo de unión de datos usando `left_join()` y fechas:**
+
+```{r}
+day_wise <- grouped %>% 
+  mutate(Date = ymd(Date) ) %>% 
+  left_join(day_wise, by = "Date")
+```
+
+
+:::
