@@ -5,9 +5,7 @@ format: html
 editor: visual
 ---
 
-
 En esta primera clase, exploraremos Tidyverse, un conjunto de paquetes en R diseñado para la manipulación, visualización y análisis de datos de manera eficiente y estructurada. Nos enfocaremos en los conceptos fundamentales para la limpieza de datos, una etapa clave en cualquier análisis, que nos permitirá transformar datos crudos en información lista para su exploración y modelado.
-
 
 ::: panel-tabset
 
@@ -17,29 +15,19 @@ En esta primera clase, exploraremos Tidyverse, un conjunto de paquetes en R dise
 
 El [Tidyverse](https://www.tidyverse.org/) "es una colección estructurada de paquetes de R diseñados para la ciencia de datos. Todos los paquetes comparten una filosofía de diseño subyacente, una gramática común y estructuras de datos coherentes".
 
-
 Cargar paquete
 
 ```{r}
 library(tidyverse)
 ```
+
 Al cargar el paquete tidyverse, aparecerá un mensaje con una lista de los paquetes principales que se están adjuntando a la sesión. Este mensaje también indica posibles conflictos entre funciones de tidyverse y otros paquetes de R.
 
 Explicación de cada sección:
 
 "Attaching core tidyverse packages"
 
-Indica que se están cargando los paquetes centrales del tidyverse, en este caso:
-dplyr: Manipulación de datos
-forcats: Manejo de factores
-ggplot2: Visualización de datos
-lubridate: Manejo de fechas y horas
-purrr: Programación funcional
-readr: Importación de datos
-stringr: Manipulación de cadenas de texto
-tibble: Estructura de datos moderna
-tidyr: Organización y limpieza de datos
-"Conflicts"
+Indica que se están cargando los paquetes centrales del tidyverse, en este caso: dplyr: Manipulación de datos forcats: Manejo de factores ggplot2: Visualización de datos lubridate: Manejo de fechas y horas purrr: Programación funcional readr: Importación de datos stringr: Manipulación de cadenas de texto tibble: Estructura de datos moderna tidyr: Organización y limpieza de datos "Conflicts"
 
 Muestra funciones que están en conflicto con otras del paquete stats (incluido en R por defecto).
 
@@ -56,7 +44,6 @@ En este primer ejercicio, trabajaremos con diferentes formatos de datos para apr
 Formatos de datos a importar:
 
 ::: panel-tabset
-
 ### 1) Excel (.xlsx)
 
 Data: Emisiones de GHG en la Producción de Alimentos
@@ -77,8 +64,6 @@ library(readxl)
 Capstone <- read_excel("data/Capstone_IA_R_V3.xlsx")
 ```
 
-
-
 ### CSV (valores separados por comas)
 
 El conjunto de datos contiene un registro de cada impacto con vida silvestre reportado en aeronaves militares, comerciales o civiles entre 1990 y 2015. Cada fila incluye la fecha del incidente, el operador de la aeronave, la marca y modelo de la aeronave, la marca y modelo del motor, el nombre y ubicación del aeropuerto, el nombre y la cantidad de la especie involucrada, y los daños sufridos por la aeronave.
@@ -89,7 +74,6 @@ La base de datos de impactos con vida silvestre fue compilada a partir de inform
 AccidentesAereos <- read.csv("data/airkraf_accident.csv")
 ```
 
-
 ### CSV delimitado por punto y coma (;)
 
 La base de datos fue recopilada en Yoro, Honduras, y registra la abundancia de aves en una zona de producción de café. Incluye algunas de las variables medidas en campo, así como la ubicación de los sitios de muestreo.
@@ -97,8 +81,6 @@ La base de datos fue recopilada en Yoro, Honduras, y registra la abundancia de a
 ```{r}
 Habitat <- read.csv2("data/AvesHabitat.csv")
 ```
-
-
 
 ### TXT (archivo de texto plano)
 
@@ -117,7 +99,6 @@ library(jsonlite)
 
 Estudiantes <- fromJSON("data/Students_Grading_Dataset.json")
 ```
-
 
 ### Shapefile (datos espaciales .gpkg)
 
@@ -139,8 +120,6 @@ library(terra)
 Elevacion <- rast("data/CRI_elv_msk.tif")
 
 ```
-
-
 :::
 
 ## Selección y filtrado de datos con dplyr
@@ -192,8 +171,6 @@ head(App_CS)
 
 ```
 
-
-
 ## Transformación de datos con mutate() y rename()
 
 En este ejercicio, continuaremos utilizando la base de datos "Estudiantes". Nos enfocaremos en transformar los datos, específicamente renombrando algunas de las variables para hacerlas más comprensibles o ajustarlas a un formato más adecuado.
@@ -210,7 +187,6 @@ Estudiantes <- rename(Estudiantes, "Asistencia" =  "Attendance (%)")
 head(Estudiantes)
 ```
 
-
 Uso de mutate()
 
 Por otro lado, mutate() se utiliza para crear nuevas columnas o modificar las existentes dentro de un data frame. mutate() permite realizar transformaciones como cálculos, conversiones de tipos de datos, y más.
@@ -222,7 +198,6 @@ Estudiantes <- mutate(Estudiantes, Asistencia_Promedio = Asistencia / 100)
 ```
 
 Este código crea una nueva columna llamada Asistencia_Promedio, que contiene los valores de asistencia en un formato decimal (de 0 a 1 en lugar de un porcentaje).
-
 
 ## Manejo de valores faltantes con tidyr
 
@@ -274,8 +249,7 @@ Food_rellenado <- mutate(Food2, Scarcity1000kcal = ifelse(is.na(Scarcity1000kcal
                                                          Scarcity1000kcal))
 ```
 
-## Uso de tuberias (%>%) o (|>)
-
+## Uso de tuberias (%\>%) o (\|\>)
 
 ```{r}
 library(dplyr)
