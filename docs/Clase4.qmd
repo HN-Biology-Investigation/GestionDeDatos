@@ -5,19 +5,61 @@ format: html
 editor: visual
 ---
 
-## Introducción a los reportes reproducibles 
+En esta clase aprenderás a utilizar `RMarkdown` para elaborar informes, diapositivas y documentos en distintos formatos como HTML, Word y PDF.
 
-## Introducción a RMarkdown
+::: panel-tabset
 
-¿Qué es RMarkdown?
-Estructura de un archivo .Rmd.
-Encabezado YAML (title, author, date, output).
-Código en R dentro de un RMarkdown 
+## Carga y exploración de datos
+
+Usaremos la base de datos "Trafico" para ilustrar el uso de `RMarkdown` en la elaboración de informes dinámicos.
 
 ```{r}
+library(tidyverse)
 
+Trafico <- read.csv2("data/2023.Accidentes_de_Trafico_GAL.csv")
+
+Trafico <- Trafico %>% 
+  glimpse()
 ```
 
-Texto en formato Markdown (negritas, listas, encabezados).
+## Creación de documentos en RMarkdown
 
-## Introducción a Quarto
+Para generar un documento en `RMarkdown`, se debe incluir metadatos al inicio del archivo:
+
+
+- title: "Análisis de Accidentes de Tráfico"
+- author: "David Murillo"
+- date: "`r Sys.Date()`"
+- output: html_document
+
+
+## Uso de Quarto
+
+Quarto es la evolución de `RMarkdown` que permite crear documentos, libros y dashboards de forma flexible. Para usar Quarto:
+
+
+- title: "Análisis de Accidentes de Tráfico"
+- author: "David Murillo"
+- date: "`r Sys.Date()`"
+- format: html
+- editor: visual
+
+
+## Generación de reportes automatizados
+
+Podemos generar reportes con tablas y gráficos interactivos:
+
+```{r}
+library(ggplot2)
+
+Trafico %>% 
+  ggplot(aes(x = Sexo, fill = Resultado.toxicolóxico)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(title = "Distribución de Resultados Toxicológicos por Sexo")
+```
+
+Este gráfico muestra la distribución de los resultados toxicológicos según el sexo de los involucrados en accidentes de tráfico.
+
+:::
+

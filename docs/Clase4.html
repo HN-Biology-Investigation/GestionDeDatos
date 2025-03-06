@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -69,17 +103,105 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="introducción-a-los-reportes-reproducibles" class="level2">
-<h2 class="anchored" data-anchor-id="introducción-a-los-reportes-reproducibles">Introducción a los reportes reproducibles</h2>
-</section>
-<section id="introducción-a-rmarkdown" class="level2">
-<h2 class="anchored" data-anchor-id="introducción-a-rmarkdown">Introducción a RMarkdown</h2>
-<p>¿Qué es RMarkdown? Estructura de un archivo .Rmd. Encabezado YAML (title, author, date, output). Código en R dentro de un RMarkdown</p>
-<p>Texto en formato Markdown (negritas, listas, encabezados).</p>
-</section>
-<section id="introducción-a-quarto" class="level2">
-<h2 class="anchored" data-anchor-id="introducción-a-quarto">Introducción a Quarto</h2>
-</section>
+<p>En esta clase aprenderás a utilizar <code>RMarkdown</code> para elaborar informes, diapositivas y documentos en distintos formatos como HTML, Word y PDF.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Carga y exploración de datos</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Creación de documentos en RMarkdown</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Uso de Quarto</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Generación de reportes automatizados</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Usaremos la base de datos “Trafico” para ilustrar el uso de <code>RMarkdown</code> en la elaboración de informes dinámicos.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Trafico <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"data/2023.Accidentes_de_Trafico_GAL.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Trafico <span class="ot">&lt;-</span> Trafico <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,188
+Columns: 28
+$ Ano                       &lt;int&gt; 2023, 2023, 2023, 2023, 2023, 2023, 2023, 20…
+$ Data                      &lt;chr&gt; "28/09/2023", "01/10/2023", "02/10/2023", "0…
+$ Territorio.INTCF          &lt;chr&gt; "INTCF-Madrid", "INTCF-Madrid", "INTCF-Madri…
+$ CCAA                      &lt;chr&gt; "Cantabria", "Castilla y León", "Castilla y …
+$ Provincia                 &lt;chr&gt; "Cantabria", "Salamanca", "León", "Cantabria…
+$ Organismo                 &lt;chr&gt; "INTCF-Madrid", "INTCF-Madrid", "INTCF-Madri…
+$ Zona                      &lt;chr&gt; "Vías interurbanas", "Vías interurbanas", "V…
+$ Rol.no.sinistro           &lt;chr&gt; "Conductor", "Conductor", "Peatón", "Conduct…
+$ Tipo.vehículo             &lt;chr&gt; "Motocicleta", "Turismo sin remolque", "Peat…
+$ Rango.de.idade            &lt;chr&gt; "45-54", "35-44", "65 o más", "25-34", "18-2…
+$ Sexo                      &lt;chr&gt; "Hombre", "Hombre", "Mujer", "Hombre", "Homb…
+$ Resultado.toxicolóxico    &lt;chr&gt; "Positivo", "Positivo", "Negativo", "Negativ…
+$ Etanol                    &lt;chr&gt; "+", "+", "-", "-", "+", "+", "-", "-", "-",…
+$ Drogas                    &lt;chr&gt; "-", "+", "-", "-", "+", "-", "-", "-", "-",…
+$ Cocaína                   &lt;chr&gt; "-", "+", "-", "-", "-", "-", "-", "-", "-",…
+$ Cánnabis                  &lt;chr&gt; "-", "+", "-", "-", "+", "-", "-", "-", "-",…
+$ Opiáceos                  &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Anfetamina.e.relacionados &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Cetamina                  &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Psicofármacos             &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Benzodiacepinas           &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Antipsicóticos            &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Antidepresivos            &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Antiepilépticos           &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Opioides                  &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", "-",…
+$ Vítimas.mortais           &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ Vítimas.toxic..positivo   &lt;int&gt; 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0,…
+$ Resultado.toxic..positivo &lt;int&gt; 1, 3, 0, 0, 2, 1, 0, 0, 0, 2, 0, 2, 1, 1, 0,…</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Para generar un documento en <code>RMarkdown</code>, se debe incluir metadatos al inicio del archivo:</p>
+<ul>
+<li>title: “Análisis de Accidentes de Tráfico”</li>
+<li>author: “David Murillo”</li>
+<li>date: “2025-03-06”</li>
+<li>output: html_document</li>
+</ul>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>Quarto es la evolución de <code>RMarkdown</code> que permite crear documentos, libros y dashboards de forma flexible. Para usar Quarto:</p>
+<ul>
+<li>title: “Análisis de Accidentes de Tráfico”</li>
+<li>author: “David Murillo”</li>
+<li>date: “2025-03-06”</li>
+<li>format: html</li>
+<li>editor: visual</li>
+</ul>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>Podemos generar reportes con tablas y gráficos interactivos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Trafico <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Sexo, <span class="at">fill =</span> Resultado.toxicolóxico)) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribución de Resultados Toxicológicos por Sexo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Clase4_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Este gráfico muestra la distribución de los resultados toxicológicos según el sexo de los involucrados en accidentes de tráfico.</p>
+</div>
+</div>
+</div>
 
 </main>
 <!-- /main column -->
