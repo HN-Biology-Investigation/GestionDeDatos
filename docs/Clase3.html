@@ -128,7 +128,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>En esta sección, exploraremos cómo unir conjuntos de datos utilizando <code>dplyr</code>. Las funciones más utilizadas para unir tablas son: - <code>left_join()</code>: Mantiene todas las filas del primer dataset y agrega coincidencias del segundo. - <code>right_join()</code>: Mantiene todas las filas del segundo dataset y agrega coincidencias del primero. - <code>inner_join()</code>: Mantiene solo las filas con coincidencias en ambos datasets. - <code>full_join()</code>: Mantiene todas las filas de ambos datasets. - <code>semi_join()</code>: Mantiene solo las filas del primer dataset que tienen coincidencias en el segundo. - <code>anti_join()</code>: Mantiene solo las filas del primer dataset que <strong>no</strong> tienen coincidencias en el segundo.</p>
+<p>En esta sección, exploraremos cómo unir conjuntos de datos utilizando <code>dplyr</code>. Las funciones más utilizadas para unir tablas son:</p>
+<ul>
+<li><code>left_join()</code>: Mantiene todas las filas del primer dataset y agrega coincidencias del segundo.</li>
+<li><code>right_join()</code>: Mantiene todas las filas del segundo dataset y agrega coincidencias del primero.</li>
+<li><code>inner_join()</code>: Mantiene solo las filas con coincidencias en ambos datasets.</li>
+<li><code>full_join()</code>: Mantiene todas las filas de ambos datasets.</li>
+<li><code>semi_join()</code>: Mantiene solo las filas del primer dataset que tienen coincidencias en el segundo.</li>
+<li><code>anti_join()</code>: Mantiene solo las filas del primer dataset que <strong>no</strong> tienen coincidencias en el segundo.</li>
+</ul>
 <p><strong>Ejemplo de <code>left_join()</code>:</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>covid19 <span class="ot">&lt;-</span> covid19 <span class="sc">%&gt;%</span> </span>
