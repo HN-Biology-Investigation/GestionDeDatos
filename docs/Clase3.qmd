@@ -35,6 +35,41 @@ covid19 <- covid19 %>%
   left_join(worldometer, by = "Country.Region" )
 ```
 
+**Ejemplo de `right`_join()`:**
+
+```{r}
+covid19 <- covid19 %>% 
+  right_join(worldometer, by = "Country.Region" )
+```
+
+**Ejemplo de `full_join()`:**
+
+```{r}
+covid19 <- covid19 %>% 
+  full_join(worldometer, by = "Country.Region" )
+```
+
+**Ejemplo de `inner_join()`:**
+
+```{r}
+covid19 <- covid19 %>% 
+  inner_join(worldometer, by = "Country.Region" )
+```
+
+**Ejemplo de `semi_join()`:**
+
+```{r}
+covid19 <- covid19 %>% 
+  semi_join(worldometer, by = "Country.Region" )
+```
+
+**Ejemplo de `anti_join()`:**
+
+```{r}
+covid19 <- covid19 %>% 
+  anti_join(worldometer, by = "Country.Region" )
+```
+
 **Uso de `bind_rows()` y `bind_cols()`:**
 
 -   `bind_rows()`: Une datasets apilando filas.
