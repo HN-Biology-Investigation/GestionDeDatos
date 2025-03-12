@@ -1,5 +1,5 @@
 ---
-title: "Clase 3: Unión de conjuntos de datos y manejo de fechas"
+title: "Clase3: Unión de conjuntos de datos y manejo de fechas e introducción a Gráficos con ggplot2"
 author: "David Murillo"
 format: html
 editor: visual
@@ -131,4 +131,52 @@ day_wise <- grouped %>%
   mutate(Date = ymd(Date) ) %>% 
   left_join(day_wise, by = "Date")
 ```
+
+## Introducción a Gráficos con ggplot2
+
+**Gráfico de línea**
+
+Evolución de casos confirmados
+
+```{r}
+ggplot(day_wise, aes(x = Date, y = Confirmed.x)) +
+  geom_line(color = "blue", linewidth = 1) +
+  labs(title = "Evolución de casos confirmados",
+       x = "Fecha",
+       y = "Casos confirmados") +
+  theme_minimal()
+```
+
+**Gráfico de barras**
+
+Nuevos casos por región de la OMS
+Este gráfico muestra la cantidad de nuevos casos en cada región de la OMS, resaltando las diferencias entre ellas.
+
+```{r}
+ggplot(day_wise, aes(x = WHO.Region, y = New.cases.x, fill = WHO.Region)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Nuevos casos por región de la OMS",
+       x = "Región OMS",
+       y = "Nuevos casos") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_brewer(palette = "Set3")
+```
+**Gráfico de dispersión** 
+
+Relación entre casos confirmados y muertes
+
+```{r, warning=FALSE, message=FALSE}
+ggplot(day_wise, aes(x = Confirmed.x, y = Deaths.x, color = WHO.Region)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Relación entre casos confirmados y muertes",
+       x = "Casos confirmados",
+       y = "Muertes") +
+  theme_minimal() +
+  scale_x_log10() +  # Escala logarítmica para mejor visualización
+  scale_y_log10() +
+  theme(legend.position = "bottom")
+```
+
 :::
+

@@ -13,11 +13,11 @@ En este curso, exploraremos técnicas avanzadas de limpieza y gestión de datos 
 
 [Filtración, reestructuración de datos y formatos longitudinales y anchos](Clase2.html)
 
-[Unión de conjuntos de datos y manejo de fechas](Clase3.html)
+[Unión de conjuntos de datos y manejo de fechas e introducción a Gráficos con ggplot2](Clase3.html)
 
 [Uso de Rmarkdown: Rnotebook y Quarto](Clase4.html)
 
-[Introducción a Gráficos con ggplot2](Clase5.html)
+[Gráficos con ggplot2](Clase5.html)
 
 [Introducción a Gráficos Interactivos con plotly](Clase6.html)
 
