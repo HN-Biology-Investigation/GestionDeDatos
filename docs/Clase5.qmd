@@ -1,16 +1,259 @@
 ---
-title: "Clase 5: Introducción a Gráficos con ggplot2"
+title: "Clase 5: Gráficos con ggplot2"
 author: "David Murillo"
 format: html
 editor: visual
 ---
 
-##  Introducción a ggplot2 y el enfoque basado en capas
+# Uso de ggplot2
 
-## Creación de gráficos de dispersión y líneas base
+::: {.panel-tabset}
 
-## Gráficos de barras y histogramas 
+## Ejercicios basicos 
 
-## Boxplots y violín para distribuciones
+### Introducción a ggplot2 y el enfoque basado en capas
 
-## Personalización avanzada de gráficos
+`ggplot2` permite crear gráficos de manera estructurada utilizando un enfoque basado en capas. Vamos a explorar la base de datos `comidaRapida`.
+
+Cargar el paquete tidyverse
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+Cargar y xxplorar la estructura de la tabla comidaRapida
+
+```{r}
+
+comidaRapida <- read.csv("data/fastfood.csv")
+str(comidaRapida)
+```
+
+::: {.panel-tabset}
+
+### Gráfico base: Relación entre calorías y grasas totales
+
+```{r}
+ggplot(data = comidaRapida, aes(x = calories, y = total_fat)) +
+  geom_point()  # Capa de puntos (gráfico de dispersión)
+```
+
+En este ejemplo, ggplot() inicializa el gráfico y aes() define las estéticas (e.g., ejes x e y). Luego, geom_point() añade la capa de puntos.
+
+#### Creación de gráficos de dispersión y líneas base
+
+Vamos a crear un gráfico de dispersión para visualizar la relación entre las calorías y el sodio, añadiendo una línea de tendencia.
+
+Gráfico de dispersión con línea de tendencia
+
+```{r}
+ggplot(comidaRapida, aes(x = calories, y = sodium)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "red") 
+```
+
+Aquí, geom_smooth() añade una línea de tendencia con un modelo lineal (method = "lm").
+
+### Gráficos de barras y histogramas
+
+Vamos a crear un gráfico de barras para visualizar la frecuencia de los ítems por restaurante y un histograma para ver la distribución de las calorías.
+
+#### Gráfico de barras: Frecuencia de ítems por restaurante
+
+```{r}
+ggplot(comidaRapida, aes(x = restaurant)) +
+  geom_bar(fill = "skyblue") +  # Gráfico de barras
+  labs(title = "Frecuencia de ítems por restaurante",
+       x = "Restaurante",
+       y = "Cantidad de ítems")
+```
+
+
+#### Histograma: Distribución de calorías
+
+```{r}
+ggplot(comidaRapida, aes(x = calories)) +
+  geom_histogram(binwidth = 50, fill = "orange", col = "black") +  
+  labs(title = "Distribución de calorías",
+       x = "Calorías",
+       y = "Frecuencia")
+```
+
+En el gráfico de barras, geom_bar() cuenta automáticamente las frecuencias. En el histograma, geom_histogram() divide los datos en intervalos (binwidth).
+
+### Boxplots y violín para distribuciones
+
+Vamos a comparar la distribución de calorías entre los restaurantes utilizando boxplots y gráficos de violín.
+
+#### Boxplot: Distribución de calorías por restaurante
+
+```{r}
+ggplot(comidaRapida, aes(x = restaurant, y = calories)) +
+  geom_boxplot(fill = "lightgreen") +  
+  labs(title = "Distribución de calorías por restaurante",
+       x = "Restaurante",
+       y = "Calorías")
+```
+
+#### Gráfico de violín: Distribución de calorías por restaurante
+
+```{r}
+ggplot(comidaRapida, aes(x = restaurant, y = calories)) +
+  geom_violin(fill = "purple", alpha = 0.6) +  
+  labs(title = "Distribución de calorías por restaurante",
+       x = "Restaurante",
+       y = "Calorías")
+```
+
+geom_boxplot() muestra la mediana, cuartiles y valores atípicos, mientras que geom_violin() muestra la densidad de la distribución.
+
+### Personalización avanzada de gráficos
+
+Vamos a personalizar un gráfico de dispersión para visualizar la relación entre calorías y grasas totales, diferenciando por restaurante.
+
+#### Gráfico personalizado: Calorías vs. Grasas totales por restaurante
+
+```{r}
+ggplot(comidaRapida, aes(x = calories, y = total_fat, col = restaurant)) +
+  geom_point(alpha = 0.7) +  
+  labs(title = "Relación entre calorías y grasas totales",
+       x = "Calorías",
+       y = "Grasas totales (g)",
+       color = "Restaurante") +
+  theme_minimal() +  
+  theme(legend.position = "bottom")  
+```
+
+En este ejemplo, labs() añade títulos y etiquetas, theme_minimal() aplica un tema visual limpio, y theme(legend.position = "bottom") coloca la leyenda en la parte inferior.
+
+:::
+
+## Ejercicios Avanzados con ggplot2 
+
+::: {.panel-tabset}
+
+### Facetas (facet_wrap y facet_grid)
+
+Las facetas permiten dividir un gráfico en múltiples subgráficos basados en una o más variables categóricas.
+
+#### Gráfico de dispersión de calorías vs. sodio, dividido por restaurante
+
+```{r}
+ggplot(comidaRapida, aes(x = calories, y = sodium)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", col = "red", se = FALSE) +  
+  facet_wrap(~restaurant, scales = "free") +  
+  labs(title = "Calorías vs. Sodio por Restaurante",
+       x = "Calorías",
+       y = "Sodio (mg)") +
+  theme_minimal()
+```
+
+En este ejemplo, facet_wrap(~restaurant) divide el gráfico en subgráficos para cada restaurante, y scales = "free" permite que cada faceta tenga sus propias escalas.
+
+### Transformaciones de datos y gráficos combinados
+
+Podemos combinar múltiples gráficos en uno solo utilizando transformaciones de datos y capas adicionales.
+
+#### Gráfico combinado: Histograma y densidad de calorías
+
+```{r}
+ggplot(comidaRapida, aes(x = calories)) +
+  geom_histogram(aes(y = ..density..), binwidth = 50, fill = "skyblue", col = "black") +  # Histograma
+  geom_density(alpha = 0.5, fill = "orange") +  # Densidad
+  labs(title = "Distribución de Calorías",
+       x = "Calorías",
+       y = "Densidad") +
+  theme_minimal()
+```
+
+Aquí, geom_histogram() muestra la distribución de calorías, y geom_density() superpone una curva de densidad.
+
+#### Uso de escalas personalizadas
+
+Podemos personalizar las escalas de los ejes, colores y formas para mejorar la visualización.
+
+Gráfico de dispersión con escalas personalizadas
+
+```{r}
+ggplot(comidaRapida, aes(x = calories, y = total_fat, col = restaurant, size = sodium)) +
+  geom_point(alpha = 0.7) +
+  scale_x_continuous(limits = c(0, 1500), breaks = seq(0, 1500, 250)) + 
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0, 100, 20)) +  # Escala personalizada en y
+  scale_color_manual(values = c("Mcdonalds" = "red", "Chick-fil-A" = "blue", "Sonic" = "green")) +  
+  labs(title = "Calorías vs. Grasas Totales",
+       x = "Calorías",
+       y = "Grasas Totales (g)",
+       color = "Restaurante",
+       size = "Sodio (mg)") +
+  theme_minimal()
+```
+
+En este gráfico, scale_x_continuous() y scale_y_continuous() personalizan los ejes, mientras que scale_color_manual() define colores específicos para cada restaurante.
+
+#### Gráficos de violín con datos transformados
+
+Podemos transformar los datos para visualizar mejor las distribuciones.
+
+Gráfico de violín con transformación logarítmica de calorías
+
+```{r}
+ggplot(comidaRapida, aes(x = restaurant, y = log(calories))) +
+  geom_violin(fill = "purple", alpha = 0.6) +
+  labs(title = "Distribución Logarítmica de Calorías por Restaurante",
+       x = "Restaurante",
+       y = "Log(Calorías)") +
+  theme_minimal()
+```
+
+Aquí, log(calories) transforma los datos para una mejor visualización de la distribución.
+
+### Gráficos de barras apiladas y agrupadas
+
+Podemos crear gráficos de barras apiladas o agrupadas para comparar múltiples variables.
+
+#### Gráfico de barras agrupadas: Grasas saturadas y trans por restaurante
+
+```{r}
+comidaRapida_summary <- comidaRapida %>%
+  group_by(restaurant) %>%
+  summarise(mean_sat_fat = mean(sat_fat, na.rm = TRUE),
+            mean_trans_fat = mean(trans_fat, na.rm = TRUE)) %>%
+  tidyr::pivot_longer(cols = starts_with("mean"), names_to = "fat_type", values_to = "mean_fat")
+```
+
+```{r}
+ggplot(comidaRapida_summary, aes(x = restaurant, y = mean_fat, fill = fat_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Grasas Saturadas y Trans por Restaurante",
+       x = "Restaurante",
+       y = "Promedio de Grasas (g)",
+       fill = "Tipo de Grasa") +
+  theme_minimal()
+```
+
+En este ejemplo, pivot_longer() transforma los datos para facilitar la creación de un gráfico de barras agrupadas.
+
+### Gráficos de mapa de calor (heatmap)
+
+Podemos crear un mapa de calor para visualizar relaciones entre múltiples variables.
+
+Mapa de calor: Relación entre calorías, sodio y restaurante
+
+```{r}
+ggplot(comidaRapida, aes(x = restaurant, y = calories, fill = sodium)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "red") +  # Escala de colores
+  labs(title = "Mapa de Calor: Calorías y Sodio por Restaurante",
+       x = "Restaurante",
+       y = "Calorías",
+       fill = "Sodio (mg)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  
+```
+
+Aquí, geom_tile() crea un mapa de calor, y scale_fill_gradient() define una escala de colores.
+
+:::
+
+:::
