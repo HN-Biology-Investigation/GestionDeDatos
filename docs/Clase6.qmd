@@ -5,12 +5,124 @@ format: html
 editor: visual
 ---
 
+::: {.panel-tabset}
+
 ## Introducción a plotly y gráficos interactivos
+
+Recursos adicionales
+
+[Documentación oficial plotly R](https://plotly.com/r/)
+
+Libro: [Interactive Data Visualization with plotly](https://plotly-r.com/)
+
+**plotly** permite crear gráficos interactivos que facilitan la exploración de datos. Veremos cómo usarlo con datos reales y cómo transformar gráficos estáticos en interactivos.
+
+```{r, warning=FALSE, message=FALSE}
+library(plotly)
+library(tidyverse)
+```
+
+Vamos a usar una base de datos con 1000 estudiantes. Contiene información sobre género, grupo étnico, nivel educativo de los padres, tipo de almuerzo, preparación para exámenes, y puntajes en matemáticas, lectura y escritura.
+
+```{r}
+Student <- read.csv("data/StudentsPerformance.csv")
+```
+
 
 ## Creación de gráficos básicos con plotly
 
+Gráfico de dispersión: Math Score vs Reading Score
+
+```{r}
+plot_ly(data = Student, x = ~math.score, y = ~reading.score,
+        type = 'scatter', mode = 'markers',
+        color = ~gender,
+        text = ~paste("Writing Score:", writing.score),
+        marker = list(size = 10)) %>%
+  layout(title = "Math vs Reading Score por Género")
+```
+
+
 ## Gráficos de barras y histogramas interactivos
+
+Gráfico de barras: Número de estudiantes por curso de preparación
+
+
+Contar estudiantes por curso de preparación
+
+
+  
+  
+```{r}
+
+prep_counts <- Student %>%
+  count(test.preparation.course)
+
+plot_ly(data = prep_counts, 
+        x = ~test.preparation.course, 
+        y = ~n, 
+        type = 'bar',
+        color = ~test.preparation.course,
+        marker = list(line = list(color = '#000000', width = 1))) %>%
+  layout(title = "Estudiantes por Curso de Preparación",
+         xaxis = list(title = "Curso de Preparación"),
+         yaxis = list(title = "Cantidad de Estudiantes"),
+         showlegend = FALSE)
+```
+
+Histograma: Distribución de puntaje en matemáticas
+
+```{r}
+plot_ly(data = Student, x = ~math.score, type = 'histogram',
+        nbinsx = 20, marker = list(color = 'skyblue')) %>%
+  layout(title = "Distribución de Puntaje en Matemáticas",
+         xaxis = list(title = "Puntaje"),
+         yaxis = list(title = "Frecuencia"))
+```
+
+
 
 ## Gráficos de caja y densidad interactivos
 
+Boxplot: Puntaje en Escritura por Tipo de Almuerzo
+
+```{r}
+plot_ly(data = Student, y = ~writing.score, x = ~lunch,
+        type = "box", color = ~lunch,
+        boxpoints = "all", jitter = 0.3,
+        pointpos = -1.8) %>%
+  layout(title = "Boxplot de Puntaje en Escritura por Tipo de Almuerzo",
+         xaxis = list(title = "Tipo de Almuerzo"),
+         yaxis = list(title = "Puntaje en Escritura"))
+```
+
+Densidad: Puntaje de Lectura
+
+```{r}
+p <- ggplot(Student, aes(x = reading.score, fill = gender)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Densidad de Puntaje en Lectura por Género")
+
+ggplotly(p)
+```
+
+
 ## Personalización avanzada y temas en plotly
+
+Personalización de colores, fondo y ejes
+
+```{r}
+plot_ly(data = Student, x = ~math.score, y = ~writing.score,
+        type = 'scatter', mode = 'markers',
+        color = ~race.ethnicity,
+        marker = list(size = 8)) %>%
+  layout(title = "Math vs Writing Score por Grupo Étnico",
+         xaxis = list(title = "Puntaje Matemáticas"),
+         yaxis = list(title = "Puntaje Escritura"),
+         plot_bgcolor = '#f0f0f0',
+         paper_bgcolor = '#ffffff')
+```
+
+:::
+
