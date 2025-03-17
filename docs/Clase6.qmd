@@ -5,17 +5,34 @@ format: html
 editor: visual
 ---
 
-::: {.panel-tabset}
+
 
 ## Introducción a plotly y gráficos interactivos
 
-Recursos adicionales
+`plotly` es una poderosa librería que permite crear gráficos interactivos y visualmente atractivos directamente desde R. A diferencia de los gráficos estáticos generados con ggplot2, los gráficos de plotly permiten al usuario explorar los datos dinámicamente: hacer zoom, mover el gráfico, ver valores al pasar el cursor y seleccionar elementos específicos.
+
+¿Cómo se usa plotly?
+plotly puede usarse de dos formas principales:
+
+Desde cero: construyendo gráficos directamente con funciones como `plot_ly()`, `add_trace()`, etc.
+
+Convertir gráficos `ggplot` en interactivos: usando la función `ggplotly()`.
+
+**Aplicaciones de plotly**
+
+- Visualización de datos exploratoria e interactiva en dashboards y reportes.
+
+- Compartir gráficos de forma accesible en páginas web o presentaciones.
+
+- Crear visualizaciones en tiempo real en aplicaciones web (Shiny).
+
+- Proyectos donde el usuario necesita interacción directa con los datos (filtrar, ver detalles, seleccionar).
+
+*Recursos adicionales*
 
 [Documentación oficial plotly R](https://plotly.com/r/)
 
 Libro: [Interactive Data Visualization with plotly](https://plotly-r.com/)
-
-**plotly** permite crear gráficos interactivos que facilitan la exploración de datos. Veremos cómo usarlo con datos reales y cómo transformar gráficos estáticos en interactivos.
 
 ```{r, warning=FALSE, message=FALSE}
 library(plotly)
@@ -28,6 +45,7 @@ Vamos a usar una base de datos con 1000 estudiantes. Contiene información sobre
 Student <- read.csv("data/StudentsPerformance.csv")
 ```
 
+::: {.panel-tabset}
 
 ## Creación de gráficos básicos con plotly
 
@@ -49,9 +67,6 @@ Gráfico de barras: Número de estudiantes por curso de preparación
 
 
 Contar estudiantes por curso de preparación
-
-
-  
   
 ```{r}
 
