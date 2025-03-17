@@ -205,5 +205,53 @@ ggraph(red_compleja, layout = "fr") +
 ```
 
 
+## Cladograma Simulado con ggtree
+
+[ggtree](https://bioconductor.org/packages/release/bioc/html/ggtree.html)
+
+
+```{r}
+# if (!require("BiocManager", quietly = TRUE))
+#    install.packages("BiocManager")
+
+# BiocManager::install("ggtree")
+
+library(ggtree)
+library(ape)
+```
+
+Simular un árbol filogenético (cladograma)
+
+```{r}
+set.seed(123)
+
+# Árbol aleatorio con 15 especies
+arbol <- rtree(15)
+
+# Renombrar especies para claridad
+arbol$tip.label <- paste("Especie", 1:15)
+```
+
+
+Graficar el cladograma
+
+```{r}
+ggtree(arbol) +
+  geom_tiplab(size = 3, fontface = "italic") +
+  labs(title = "Cladograma Simulado") +
+  theme_tree2() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
+```
+
+Cladograma radial 
+
+```{r}
+ggtree(arbol, layout = "circular") +
+  geom_tiplab(size = 2.5, hjust = -0.1, fontface = "italic") +
+  labs(title = "Cladograma Radial Simulado") +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
+```
+
 
 :::
