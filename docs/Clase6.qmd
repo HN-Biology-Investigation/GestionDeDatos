@@ -5,14 +5,11 @@ format: html
 editor: visual
 ---
 
-
-
 ## Introducción a plotly y gráficos interactivos
 
 `plotly` es una poderosa librería que permite crear gráficos interactivos y visualmente atractivos directamente desde R. A diferencia de los gráficos estáticos generados con ggplot2, los gráficos de plotly permiten al usuario explorar los datos dinámicamente: hacer zoom, mover el gráfico, ver valores al pasar el cursor y seleccionar elementos específicos.
 
-¿Cómo se usa plotly?
-plotly puede usarse de dos formas principales:
+¿Cómo se usa plotly? plotly puede usarse de dos formas principales:
 
 Desde cero: construyendo gráficos directamente con funciones como `plot_ly()`, `add_trace()`, etc.
 
@@ -20,13 +17,13 @@ Convertir gráficos `ggplot` en interactivos: usando la función `ggplotly()`.
 
 **Aplicaciones de plotly**
 
-- Visualización de datos exploratoria e interactiva en dashboards y reportes.
+-   Visualización de datos exploratoria e interactiva en dashboards y reportes.
 
-- Compartir gráficos de forma accesible en páginas web o presentaciones.
+-   Compartir gráficos de forma accesible en páginas web o presentaciones.
 
-- Crear visualizaciones en tiempo real en aplicaciones web (Shiny).
+-   Crear visualizaciones en tiempo real en aplicaciones web (Shiny).
 
-- Proyectos donde el usuario necesita interacción directa con los datos (filtrar, ver detalles, seleccionar).
+-   Proyectos donde el usuario necesita interacción directa con los datos (filtrar, ver detalles, seleccionar).
 
 *Recursos adicionales*
 
@@ -45,8 +42,7 @@ Vamos a usar una base de datos con 1000 estudiantes. Contiene información sobre
 Student <- read.csv("data/StudentsPerformance.csv")
 ```
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Creación de gráficos básicos con plotly
 
 Gráfico de dispersión: Math Score vs Reading Score
@@ -60,14 +56,12 @@ plot_ly(data = Student, x = ~math.score, y = ~reading.score,
   layout(title = "Math vs Reading Score por Género")
 ```
 
-
 ## Gráficos de barras y histogramas interactivos
 
 Gráfico de barras: Número de estudiantes por curso de preparación
 
-
 Contar estudiantes por curso de preparación
-  
+
 ```{r}
 
 prep_counts <- Student %>%
@@ -95,8 +89,6 @@ plot_ly(data = Student, x = ~math.score, type = 'histogram',
          yaxis = list(title = "Frecuencia"))
 ```
 
-
-
 ## Gráficos de caja y densidad interactivos
 
 Boxplot: Puntaje en Escritura por Tipo de Almuerzo
@@ -122,7 +114,6 @@ p <- ggplot(Student, aes(x = reading.score, fill = gender)) +
 ggplotly(p)
 ```
 
-
 ## Personalización avanzada y temas en plotly
 
 Personalización de colores, fondo y ejes
@@ -138,6 +129,4 @@ plot_ly(data = Student, x = ~math.score, y = ~writing.score,
          plot_bgcolor = '#f0f0f0',
          paper_bgcolor = '#ffffff')
 ```
-
 :::
-

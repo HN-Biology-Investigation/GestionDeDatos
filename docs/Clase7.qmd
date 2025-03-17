@@ -7,10 +7,202 @@ editor: visual
 
 ## Introducción a la Visualización Multivariada
 
+En análisis de datos, muchas veces trabajamos con múltiples variables que pueden estar correlacionadas o influir entre sí. La **visualización multivariada** permite explorar estas relaciones de manera clara, ayudándonos a:
+
+- Detectar patrones y agrupaciones.
+- Identificar relaciones entre variables.
+- Reducir la dimensionalidad para facilitar la interpretación.
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(FactoMineR)
+library(factoextra)
+
+
+Student <- read.csv("data/StudentsPerformance.csv")
+```
+
+::: {.panel-tabset}
+
 ## Gráficos de Dispersión Multivariados
+
+### Dispersión básica (2 variables)
+
+```{r}
+ggplot(Student, aes(x = math.score, y = reading.score)) +
+  geom_point(aes(color = gender), alpha = 0.6) +
+  labs(title = "Relación entre Matemáticas y Lectura",
+       x = "Puntaje de Matemáticas",
+       y = "Puntaje de Lectura",
+       color = "Género") +
+  theme_minimal()
+```
+
+### Dispersión multivariada (añadiendo 3ra variable)
+
+```{r}
+ggplot(Student, aes(x = math.score, y = reading.score)) +
+  geom_point(aes(color = gender, size = writing.score), alpha = 0.6) +
+  labs(title = "Relación entre Matemáticas, Lectura y Escritura",
+       x = "Matemáticas", y = "Lectura", size = "Escritura") +
+  theme_classic()
+```
+
 
 ## Matrices de Dispersión para Múltiples Variables
 
+Cuando queremos explorar las relaciones entre varias variables cuantitativas:
+
+```{r}
+library(GGally)
+
+Student_numeric <- Student[, c("math.score", "reading.score", "writing.score")]
+
+ggpairs(Student_numeric,
+        title = "Matriz de Dispersión: Puntajes Académicos")
+```
+
+
 ## PCA y Visualización de Componentes Principales
 
+
+```{r}
+pca_result <- prcomp(Student_numeric, scale. = TRUE)
+```
+
+
+
+Visualización básica
+
+```{r}
+biplot(pca_result, main = "PCA: Biplot de Puntajes")
+```
+
+Visualización con factoextra
+
+```{r}
+fviz_pca_ind(pca_result,
+             geom.ind = "point",
+             col.ind = Student$gender,
+             palette = "jco",
+             addEllipses = TRUE,
+             legend.title = "Género",
+             title = "PCA: Distribución por Género")
+```
+
+
+
 ## NMDS
+
+¿Qué es NMDS?
+
+El NMDS es una técnica no paramétrica para representar similitudes/diferencias en datos multivariados, especialmente útil con datos ecológicos o de encuestas.
+
+
+```{r}
+library(vegan)
+
+# Crear matriz de distancias
+Student_dist <- dist(Student_numeric)
+
+# NMDS
+nmds_result <- metaMDS(Student_numeric, distance = "euclidean", k = 2)
+
+# Visualizar
+plot(nmds_result, type = "t", main = "NMDS: Visualización Multivariada")
+```
+
+## Simulación de datos y red trófica con ggraph
+
+```{r}
+library(igraph)
+library(ggraph)
+```
+
+Simular datos de organismos y relaciones tróficas
+
+```{r}
+organismos <- c("Águila", "Serpiente", "Rana", "Insecto", "Planta", "Ratón", "Zorro")
+
+# Relaciones tróficas (depredador → presa)
+relaciones <- data.frame(
+  from = c("Águila", "Águila", "Zorro", "Serpiente", "Rana", "Ratón", "Insecto"),
+  to   = c("Serpiente", "Zorro", "Ratón", "Rana", "Insecto", "Planta", "Planta")
+)
+
+```
+
+
+Crear objeto de red
+
+```{r}
+red_trofica <- graph_from_data_frame(relaciones, vertices = organismos)
+```
+
+
+Graficar red trófica con ggraph
+
+```{r}
+ggraph(red_trofica, layout = "circle") +
+  geom_edge_link(arrow = arrow(length = unit(4, 'mm')),
+                 end_cap = circle(3, 'mm'),
+                 color = "darkred") +
+  geom_node_point(size = 8, color = "darkgreen") +
+  geom_node_text(aes(label = name), repel = TRUE, color = "black", fontface = "bold") +
+  theme_void() +
+  labs(title = "Red Trófica Simulada")
+```
+Explicación rápida:
+
+- Nodos: representan organismos.
+- Arcos (edges): relación depredador → presa.
+- Layout circular: disposición estética para claridad, puede cambiarse a "kk" (Kamada-Kawai) para redes grandes.
+
+## Red Trófica Compleja
+
+Simular organismos y relaciones tróficas
+
+```{r}
+set.seed(123)  # Para reproducibilidad
+
+# Simular 30 organismos con nombres genéricos
+organismos <- paste("Especie", 1:30)
+
+# Crear 50 interacciones aleatorias (sin loops: un organismo no se depreda a sí mismo)
+relaciones <- data.frame(
+  from = sample(organismos, 50, replace = TRUE),
+  to = sample(organismos, 50, replace = TRUE)
+) %>% 
+  filter(from != to) %>%  # Eliminar loops
+  distinct()              # Eliminar duplicados
+
+# Asegurar al menos 50 relaciones únicas
+while(nrow(relaciones) < 50) {
+  extra <- data.frame(
+    from = sample(organismos, 10, replace = TRUE),
+    to = sample(organismos, 10, replace = TRUE)
+  ) %>% filter(from != to)
+  
+  relaciones <- bind_rows(relaciones, extra) %>% distinct()
+}
+
+# Crear objeto de red
+red_compleja <- graph_from_data_frame(relaciones, vertices = organismos)
+```
+
+Graficar la red trófica compleja
+
+```{r}
+ggraph(red_compleja, layout = "fr") +
+  geom_edge_link(arrow = arrow(length = unit(3, 'mm')), 
+                 end_cap = circle(2, 'mm'), 
+                 color = "darkblue", alpha = 0.7) +
+  geom_node_point(size = 5, color = "darkorange") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3, color = "black") +
+  theme_void() +
+  labs(title = "Red Trófica Simulada Compleja") +
+  theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5))
+```
+
+
+:::
