@@ -205,4 +205,5 @@ ggraph(red_compleja, layout = "fr") +
 ```
 
 
+
 :::
