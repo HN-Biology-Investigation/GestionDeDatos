@@ -5,12 +5,223 @@ format: html
 editor: visual
 ---
 
+## Introducción a la Clase: Visualización de Modelos Estadísticos
+
+La visualización de datos es una herramienta poderosa en el análisis estadístico que no solo facilita la comprensión de los resultados, sino que también ayuda a comunicar de manera efectiva las conclusiones obtenidas a partir de modelos estadísticos. En esta clase, exploraremos diferentes métodos para visualizar los resultados de modelos lineales (LM), modelos lineales generalizados (GLM).
+
+
+Cargar paquetes y base de datos
+
+```{r}
+library(tidyverse)
+library(ggeffects)
+library(sjPlot)
+
+Accidentes <- read.csv2("data/2023.Accidentes_de_Trafico_GAL.csv")
+```
+
+::: {.panel-tabset}
+
+## Preparar base de datos
+
+Convertir columna 'Data' a formato fecha
+
+```{r}
+Accidentes <- Accidentes %>%
+  mutate(Data = as.Date(Data, format = "%d/%m/%Y"))
+```
+
+Convertir variables categóricas a factor
+
+```{r}
+Accidentes <- Accidentes %>%
+  mutate(across(c(Territorio.INTCF, CCAA, Provincia, Organismo, Zona, 
+                  Rol.no.sinistro, Tipo.vehículo, Rango.de.idade, Sexo,
+                  Resultado.toxicolóxico), as.factor))
+```
+
+
+Crear variable año-mes para análisis temporal agregado
+
+```{r}
+Accidentes <- Accidentes %>%
+  mutate(AnoMes = format(Data, "%Y-%m")) %>%
+  mutate(AnoMes = as.factor(AnoMes))
+```
+
+Crear variable binaria de resultado toxicológico positivo (1/0)
+
+```{r}
+Accidentes <- Accidentes %>%
+  mutate(Toxico_Pos = ifelse(Resultado.toxicolóxico == "Positivo", 1, 0))
+```
+
+Variables individuales de consumo (Etanol, Drogas, Cocaína...) a binario (1 = +, 0 = -)
+
+```{r}
+sustancias <- c("Etanol", "Drogas", "Cocaína", "Cánnabis", "Opiáceos", 
+                "Anfetamina.e.relacionados", "Cetamina", "Psicofármacos", 
+                "Benzodiacepinas", "Antipsicóticos", "Antidepresivos", 
+                "Antiepilépticos", "Opioides")
+
+Accidentes <- Accidentes %>%
+  mutate(across(all_of(sustancias), ~ ifelse(. == "+", 1, 0)))
+```
+
+
+
 ## Visualización de Modelos Lineales (lm) con ggplot2
 
-## Visualización de Modelos Generalizados (glm) con ggplot2
+Modelo lineal: ¿Aumentan las víctimas mortales según el resultado toxicológico y tipo de vehículo?
+
+Modelo lineal
+
+```{r}
+lm_model <- lm(Vítimas.mortais ~ Toxico_Pos + Tipo.vehículo, data = Accidentes)
+```
+
+Niveles únicos de las variables categóricas
+
+```{r}
+niveles_tipo <- levels(Accidentes$Tipo.vehículo)
+niveles_toxico <- levels(as.factor(Accidentes$Toxico_Pos))
+
+newdata_tipo <- data.frame(
+  Tipo.vehículo = niveles_tipo,
+  Toxico_Pos = 0  
+)
+
+newdata_toxico <- data.frame(
+  Tipo.vehículo = "Turismo sin remolque",  # Base
+  Toxico_Pos = c(0, 1)
+)
+```
+
+
+
+Valores esperados manualmente
+
+```{r}
+# Valores esperados e IC para newdata_tipo
+pred_tipo <- predict(lm_model, newdata = newdata_tipo, se.fit = TRUE)
+
+# Guardar predicciones y calcular IC 95%
+newdata_tipo$fit <- pred_tipo$fit
+newdata_tipo$se <- pred_tipo$se.fit
+newdata_tipo$lwr <- newdata_tipo$fit - 1.96 * newdata_tipo$se
+newdata_tipo$upr <- newdata_tipo$fit + 1.96 * newdata_tipo$se
+
+# Lo mismo para newdata_toxico
+pred_toxico <- predict(lm_model, newdata = newdata_toxico, se.fit = TRUE)
+
+newdata_toxico$fit <- pred_toxico$fit
+newdata_toxico$se <- pred_toxico$se.fit
+newdata_toxico$lwr <- newdata_toxico$fit - 1.96 * newdata_toxico$se
+newdata_toxico$upr <- newdata_toxico$fit + 1.96 * newdata_toxico$se
+
+
+```
+
+Gráfico manual con ggplot2
+
+```{r}
+ggplot(newdata_tipo, aes(x = Tipo.vehículo, y = fit)) +
+  geom_col(fill = "skyblue") +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
+  coord_flip() +
+  labs(title = "Efecto de Tipo.vehículo (Tóxico Pos = 0)", 
+       y = "Vítimas mortais esperadas ± IC 95%") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(newdata_toxico, aes(x = factor(Toxico_Pos), y = fit)) +
+  geom_col(fill = "salmon", width = 0.7) +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.7) +
+  labs(title = "Efecto de Tóxico_Pos (Tipo.vehículo = Turismo sin remolque)", 
+       x = "Tóxico Positivo", y = "Vítimas mortais esperadas ± IC 95%") +
+  theme_classic()
+```
+
+
 
 ## Visualización de Modelos con ggpredict
 
+Predecir efectos marginales y graficar con ggplot2
+
+```{r}
+pred_lm_tipo <- ggpredict(lm_model, terms = "Tipo.vehículo")
+
+plot(pred_lm_tipo) + 
+  labs(title = "Víctimas Mortales (lm) con ggpredict",
+       y = "Víctimas Mortales Esperadas", x = "Tipo de Vehículo") +
+  theme_minimal()
+```
+
+```{r}
+pred_lm_toxico <- ggpredict(lm_model, terms = "Toxico_Pos")
+
+plot(pred_lm_toxico) + 
+  labs(title = "Víctimas Mortales (lm) con ggpredict",
+       y = "Víctimas Mortales Esperadas", x = "Positivo en toxina") +
+  theme_minimal()
+```
+
+
 ## Uso de sjPlot para Visualización de Modelos
 
-## Visualización de Residuos del Modelo 
+Graficar efectos de modelo directamente
+
+```{r}
+glm_model <- glm(Vítimas.mortais ~ Toxico_Pos + Tipo.vehículo, data = Accidentes, family = "poisson")
+```
+
+
+```{r}
+plot_model(glm_model, type = "pred", terms = "Toxico_Pos", title = "Predicciones GLM") +
+  theme_bw()
+```
+
+```{r}
+plot_model(glm_model, type = "pred", terms = "Tipo.vehículo", title = "Predicciones GLM") +
+  theme_bw()
+```
+
+
+## Visualización con emmeans
+
+```{r}
+library(emmeans)
+```
+
+
+
+Medias marginales estimadas
+
+```{r}
+emm <- emmeans(glm_model, ~ Tipo.vehículo | Toxico_Pos)
+```
+
+Gráfico
+
+```{r}
+plot(emm, type = "response") +
+  labs(title = "Estimaciones Marginales GLM (emmeans)", y = "Víctimas Mortales Esperadas")
+
+```
+```{r}
+plot(emm, type = "response", 
+     comparisons = TRUE,              # Mostrar líneas de comparación
+     horizontal = TRUE,               # Para girar ejes
+     colors = c("steelblue", "tomato"), # Colores para niveles de Toxico_Pos
+     lwd = 2,                         # Grosor de líneas
+     pch = 19,                        # Tipo de punto
+     cex = 1.2,                       # Tamaño de punto
+     xlab = "Víctimas Mortales Esperadas ± IC 95%",
+     ylab = "Tipo de Vehículo",
+     main = "Estimaciones Marginales GLM (emmeans)") 
+```
+
+
+
+:::
