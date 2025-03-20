@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -34,6 +68,26 @@ ul.task-list li input[type="checkbox"] {
 <script src="Clase9_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Clase9_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Clase9_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="Clase9_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="Clase9_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="Clase9_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="Clase9_files/libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+
+<script src="Clase9_files/libs/leaflet-1.3.1/leaflet.js"></script>
+
+<link href="Clase9_files/libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+
+<script src="Clase9_files/libs/proj4-2.6.2/proj4.min.js"></script>
+
+<script src="Clase9_files/libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+
+<link href="Clase9_files/libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+
+<script src="Clase9_files/libs/leaflet-binding-2.2.2/leaflet.js"></script>
+
 
 
 </head>
@@ -71,18 +125,152 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introducción-a-los-gráficos-dinámicos" class="level2">
 <h2 class="anchored" data-anchor-id="introducción-a-los-gráficos-dinámicos">Introducción a los gráficos dinámicos</h2>
-</section>
-<section id="introducción-a-gganimate" class="level2">
-<h2 class="anchored" data-anchor-id="introducción-a-gganimate">Introducción a gganimate</h2>
-</section>
-<section id="personalización-de-animaciones-con-gganimate" class="level2">
-<h2 class="anchored" data-anchor-id="personalización-de-animaciones-con-gganimate">Personalización de animaciones con gganimate</h2>
-</section>
-<section id="exportación-de-las-animaciones" class="level2">
-<h2 class="anchored" data-anchor-id="exportación-de-las-animaciones">Exportación de las animaciones</h2>
-</section>
-<section id="gráficos-con-leaflet" class="level2">
-<h2 class="anchored" data-anchor-id="gráficos-con-leaflet">Gráficos con leaflet</h2>
+<p>gganimate es una extensión del paquete ggplot2 que permite crear gráficos animados. Permite mostrar cambios en los datos a lo largo del tiempo o de alguna otra dimensión (por ejemplo, categorías, etapas, etc.). Las animaciones pueden ser exportadas como GIF, MP4 o HTML.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>Covid <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/covid_19_clean_complete_p1.csv"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>Covid <span class="ot">&lt;-</span> Covid <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Fecha =</span> <span class="fu">ymd</span>(Date))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Introducción a los gráficos dinámicos</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Personalización de animaciones con gganimate</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Gráficos con leaflet</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Mapa animado</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Animando casos confirmados en 5 países seleccionados</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>paises <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Italy"</span>, <span class="st">"Spain"</span>, <span class="st">"United States"</span>, <span class="st">"China"</span>, <span class="st">"Brazil"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Covid_filtrado <span class="ot">&lt;-</span> Covid <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Country.Region <span class="sc">%in%</span> paises) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Fecha, Country.Region) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Confirmed =</span> <span class="fu">sum</span>(Confirmed), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Covid_filtrado, <span class="fu">aes</span>(<span class="at">x =</span> Fecha, <span class="at">y =</span> Confirmed, <span class="at">color =</span> Country.Region)) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Casos confirmados de COVID-19"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Fecha: {frame_time}"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Fecha"</span>, <span class="at">y =</span> <span class="st">"Casos Confirmados"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">"País"</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_reveal</span>(Fecha)<span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ease_aes</span>(<span class="st">'linear'</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># anim  &lt;- animate(p1, width = 800, height = 500, fps = 20, duration = 5, renderer = magick_renderer() )</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># anim</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Casos acumulados por país (gráfico de barras)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Covid_bar <span class="ot">&lt;-</span> Covid_filtrado <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Fecha) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="fu">rank</span>(<span class="sc">-</span>Confirmed)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rank <span class="sc">&lt;=</span> <span class="dv">5</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(Covid_bar, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Country.Region, Confirmed), <span class="at">y =</span> Confirmed, <span class="at">fill =</span> Country.Region)) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 5 países con más casos confirmados"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Fecha: {frame_time}"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Casos Confirmados"</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(Fecha) <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ease_aes</span>(<span class="st">'linear'</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># anim2 &lt;- animate(p2, width = 800, height = 500, fps = 20, duration = 10, renderer = magick_renderer())</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># anim2</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># anim_save("covid_evolucion.gif", anim2)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>Covid_ultima_fecha <span class="ot">&lt;-</span> Covid <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Fecha <span class="sc">==</span> <span class="fu">max</span>(Fecha)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Active <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>leaflet<span class="sc">::</span><span class="fu">leaflet</span>(Covid_ultima_fecha) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  leaflet<span class="sc">::</span><span class="fu">addTiles</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  leaflet<span class="sc">::</span><span class="fu">addCircleMarkers</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">lng =</span> <span class="sc">~</span>Long, <span class="at">lat =</span> <span class="sc">~</span>Lat,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">radius =</span> <span class="sc">~</span><span class="fu">sqrt</span>(Active)<span class="sc">/</span><span class="dv">100</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">stroke =</span> <span class="cn">FALSE</span>, <span class="at">fillOpacity =</span> <span class="fl">0.5</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="sc">~</span><span class="fu">paste</span>(Country.Region, <span class="st">"&lt;br&gt;Activos:"</span>, Active)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  leaflet<span class="sc">::</span><span class="fu">addLegend</span>(<span class="st">"bottomright"</span>, <span class="at">colors =</span> <span class="st">"red"</span>, <span class="at">labels =</span> <span class="st">"Casos activos"</span>, <span class="at">title =</span> <span class="st">"COVID-19"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-bdf87947f293520be83e" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-bdf87947f293520be83e">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[33.93911,41.1533,28.0339,42.5063,-11.2027,17.0608,-38.4161,40.0691,-35.4735,-33.8688,-12.4634,-27.4698,-34.9285,-42.8821,-37.8136,-31.9505,47.5162,40.1431,25.025885,26.0275,23.685,13.1939,53.7098,50.8333,9.307700000000001,27.5142,-16.2902,43.9159,-14.235,42.7339,12.2383,16.5388,11.55,3.848,53.9333,53.7267,53.7609,46.5653,53.1355,44.682,51.2538,46.5107,52.9399,52.9399,6.6111,15.4542,-35.6751,40.1824,30.0572,26.0789,23.3417,39.549,37.8957,22.3,44.0935,32.9711,43.6661,41.2956,35.1917,36.3427,31.202,30.6171,39.3054,41.1129,24.974,29.1832,4.5709,-0.228,-4.0383,9.748900000000001,7.54,45.1,21.521757,35.1264,49.8175,61.8926,71.7069,56.2639,11.8251,18.7357,-1.8312,26.820553,13.7942,1.6508,15.1794,58.5953,-26.5225,9.145,-17.7134,61.92411,3.9339,-17.6797,16.265,-12.8275,-21.1151,17.9,18.0708,14.6415,46.2276,-0.8037,13.4432,42.3154,51.165691,7.9465,39.0742,15.7835,9.945600000000001,4.860416000000002,18.9712,15.2,47.1625,64.9631,20.593684,-0.7893,32.427908,33.223191,53.1424,31.046051,41.87194,18.1096,36.204824,31.24,48.0196,-0.0236,35.90775700000001,29.31166,41.20438,56.8796,33.8547,6.428055000000001,47.14,55.1694,49.8153,-18.766947,4.210483999999999,3.2028,35.9375,21.0079,-20.348404,23.6345,47.4116,43.7333,46.8625,42.70867800000001,31.7917,-22.9576,28.1667,12.5211,12.1696,18.0425,52.1326,-40.9006,12.865416,17.607789,9.082000000000001,41.6086,60.472,21.512583,30.3753,8.538,-6.314993,-23.4425,-9.19,12.879721,51.9194,39.3999,25.3548,45.9432,61.52401,-1.9403,13.9094,12.9843,23.885942,14.4974,44.0165,-4.6796,1.2833,48.669,46.1512,5.152149,-30.5595,40.463667,7.873054,12.8628,3.9193,60.128161,46.8182,23.7,-6.369028,15.870032,8.6195,10.6918,33.886917,38.9637,1.373333,48.3794,23.424076,32.3078,49.3723,36.1408,16.742498,55.3781,-32.5228,40,41.377491,6.4238,14.058324,-13.133897,-19.015438,-18.665695,34.802075,-8.874217,17.1899,19.85627,26.3351,31.9522,11.8037,17.570692,17.357822,64.82550000000001,64.28230000000001,42.602636,21.9162,21.69400000000001,-22.3285,-3.3731,8.460555000000001,-13.2543,46.8852,6.877000000000002,24.2155,0.1864,15.552727,-11.6455,38.861,-29.61],[67.709953,20.1683,1.6596,1.5218,17.8739,-61.7964,-63.6167,45.0382,149.0124,151.2093,130.8456,153.0251,138.6007,147.3272,144.9631,115.8605,14.5501,47.5769,-78.035889,50.55,90.3563,-59.5432,27.9534,4.469936,2.3158,90.4336,-63.5887,17.6791,-51.9253,25.4858,-1.5616,-23.0418,104.9167,11.5021,-116.5765,-127.6476,-98.8139,-66.4619,-57.6604,-63.7443,-85.3232,-63.4168,-73.5491,-106.4509,20.9394,18.7322,-71.54300000000001,116.4142,107.874,117.9874,113.4244,116.1306,114.9042,114.2,113.9448,119.455,126.1923,122.6085,108.8701,118.1498,121.4491,102.7103,117.323,85.2401,101.487,120.0934,-74.29730000000001,15.8277,21.7587,-83.7534,-5.5471,15.2,-77.78116700000002,33.4299,15.473,-6.9118,-42.6043,9.501799999999999,42.5903,-70.1627,-78.18340000000001,30.802498,-88.8965,10.2679,39.7823,25.0136,31.4659,40.4897,178.065,25.748151,-53.1258,149.4068,-61.551,45.166244,55.5364,-62.8333,-63.0501,-61.0242,2.2137,11.6094,-15.3101,43.3569,10.451526,-1.0232,21.8243,-90.2308,-9.6966,-58.93018000000001,-72.2852,-86.2419,19.5033,-19.0208,78.96288,113.9213,53.68804599999999,43.679291,-7.6921,34.851612,12.56738,-77.2975,138.252924,36.51,66.9237,37.9062,127.766922,47.481766,74.766098,24.6032,35.8623,-9.429499,9.550000000000001,23.8813,6.1296,46.869107,101.975766,73.22069999999999,14.3754,-10.9408,57.552152,-102.5528,28.3699,7.4167,103.8467,19.37439,-7.0926,18.4904,84.25,-69.9683,-68.98999999999999,-63.0548,5.2913,174.886,-85.207229,8.081666,8.6753,21.7453,8.4689,55.92325500000001,69.3451,-80.7821,143.95555,-58.4438,-75.01519999999999,121.774017,19.1451,-8.224500000000001,51.1839,24.9668,105.318756,29.8739,-60.9789,-61.2872,45.079162,-14.4524,21.0059,55.492,103.8333,19.699,14.9955,46.199616,22.9375,-3.74922,80.77179699999998,30.2176,-56.0278,18.643501,8.227499999999999,121,34.888822,100.992541,0.8248,-61.2225,9.537499,35.2433,32.290275,31.1656,53.847818,-64.7505,-2.3644,-5.3536,-62.187366,-3.436,-55.7658,-100,64.585262,-66.58969999999999,108.277199,27.849332,29.154857,35.529562,38.99681500000001,125.727539,-88.49760000000001,102.495496,17.228331,35.2332,-15.1804,-3.996166000000001,-62.782998,-124.8457,-135,20.902977,95.956,-71.7979,24.6849,29.9189,-11.779889,34.3015,-56.3159,31.307,-12.8858,6.6131,48.516388,43.3333,71.2761,28.2336],[0.9897474425326898,0.4462062303464621,0.8929165694509201,0.07211102550927978,0.2582634314028991,0.04242640687119285,3.02955442268331,1.00069975517135,0.01,0.2570992026436488,0.01,0.02645751311064591,0.01414213562373095,0.01,0.7175653280364095,0.01732050807568877,0.3998749804626441,0.8234682750416071,0.1673320053068151,0.5684188596448925,3.123731742643725,0.03,0.7887331614684399,1.978736970898356,0.2643860813280457,0.03605551275463989,2.169239498073,0.7262231062146123,7.128225585655943,0.6847627326307996,0.11,0.2749545416973504,0.08888194417315588,0.4669047011971501,1.010148503933951,0.575065213693195,0.1982422760159901,0.1296148139681572,0.1621727474022686,0.3168595903550972,1.945918806117048,0.06,2.303497341001287,0.3453983207834109,0.5471745608121781,0.06082762530298219,1.370474370427992,0.05196152422706632,0.01,0.02,0.04358898943540674,0.1852025917745214,0.3541186241925155,0.3563705936241092,0.03605551275463989,0.01,0.01414213562373095,0.06855654600401044,0.01414213562373095,0.02645751311064591,0.04242640687119285,0.02449489742783178,0.02449489742783178,0.1532970971675589,0.01414213562373095,0.01,3.42290812029771,0.4813522618623496,0.5418486873657626,1.090962877461924,0.7209715667070374,0.2839013913315678,0.09695359714832659,0.1374772708486752,0.6095079983068311,0.05099019513592785,0.01,0.2273763400180415,0.04898979485566356,1.812980970666819,2.018241809100188,2.301999131190105,0.8275868534480233,0.4666904755831214,0.08602325267042626,0.06480740698407861,0.3545419580247167,0.8906739021662193,0.03,0.122065556157337,0.3774917217635375,0.01414213562373095,0.03605551275463989,0.1378404875209022,0.07810249675906654,0.01,0.0223606797749979,0.124899959967968,3.27218581379481,0.4957822102496216,0.1587450786638754,0.1410673597966589,0.875956619930462,0.6045659600076736,0.51487862647424,1.05323311759553,0.2744084546802449,0.1371130920080209,0.530754180388624,1.831283702761536,0.2286919325205855,0.0458257569495584,7.039168985043618,1.931113668327165,1.501665741768121,1.760198852402762,0.2764054992217051,1.90730175903028,1.121650569473399,0.1135781669160055,0.9041017641836565,0.1113552872566004,1.722178852500518,0.9928242543370907,0.2993325909419153,0.9425497334358544,1.038749247893831,0.119582607431014,0.4606517122512408,0.2118962010041709,0.02,0.1786057109949175,0.3720215047547655,0.5778408085277467,0.1337908816025965,0.2840774542268358,0.05196152422706632,0.3740320841853009,0.01414213562373095,2.183048327454067,0.7906958960308319,0.0282842712474619,0.08185352771872451,0.4515528761950254,0.6338769596696191,0.4164132562731402,0.7035623639735143,0.03741657386773942,0.02,0.06,2.16817895940349,0.0458257569495584,0.2896549671592047,0.06,1.487178536692888,0.6467611614808051,0.1118033988749895,1.401320805525987,1.655928742428248,1.582213639177719,0.07141428428542851,0.4,3.142483094624377,2.316225377634914,0.9418067742376883,1.149130105775669,0.5571355310873648,1.33798355744755,4.484384015670379,0.299833287011299,0.01414213562373095,0.03605551275463989,2.079374906071534,0.5561474624593733,1.536164053739053,0.08660254037844388,0.7154718722633336,0.2317326045251293,0.1542724862054151,0.39496835316263,4.129612572627122,3.059624159925529,0.2594224354214569,0.6902897942168927,0.2310844001658269,2.714682301854123,0.3998749804626441,0.03872983346207417,0.1746424919657298,0.1131370849898476,0.157797338380595,0.03464101615137755,0.1574801574802362,1.044988038209051,0.1183215956619923,1.681011600197929,0.7951100552753688,0.02,0.02,0.0223606797749979,0.01,5.043332231768992,0.1469693845669907,16.7822644479224,0.9702576977277738,0.7670071707617864,0.08124038404635961,0.3996248240537617,0.4610856753359401,0.4110960958218893,0.2517935662402834,0.04898979485566356,0.04472135954999579,0.01,0.4675467891024384,0.8240752392834042,0.3354101966249685,0.2181742422927143,0.01414213562373095,0.0223606797749979,0.03741657386773942,0.5657738063926254,0.07211102550927978,0.07810249675906654,0.2596150997149434,0.08717797887081348,0.2,0.4381780460041329,0.01732050807568877,0.3292415526630866,0.01,0.1081665382639197,0.1936491673103709,0.04358898943540674,0.338673884437522,0.191049731745428],null,null,{"interactive":true,"className":"","stroke":false,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.5},null,null,["Afghanistan <br>Activos: 9796","Albania <br>Activos: 1991","Algeria <br>Activos: 7973","Andorra <br>Activos: 52","Angola <br>Activos: 667","Antigua and Barbuda <br>Activos: 18","Argentina <br>Activos: 91782","Armenia <br>Activos: 10014","Australia <br>Activos: 1","Australia <br>Activos: 661","Australia <br>Activos: 1","Australia <br>Activos: 7","Australia <br>Activos: 2","Australia <br>Activos: 1","Australia <br>Activos: 5149","Australia <br>Activos: 3","Austria <br>Activos: 1599","Azerbaijan <br>Activos: 6781","Bahamas <br>Activos: 280","Bahrain <br>Activos: 3231","Bangladesh <br>Activos: 97577","Barbados <br>Activos: 9","Belarus <br>Activos: 6221","Belgium <br>Activos: 39154","Benin <br>Activos: 699","Bhutan <br>Activos: 13","Bolivia <br>Activos: 47056","Bosnia and Herzegovina <br>Activos: 5274","Brazil <br>Activos: 508116","Bulgaria <br>Activos: 4689","Burkina Faso <br>Activos: 121","Cabo Verde <br>Activos: 756","Cambodia <br>Activos: 79","Cameroon <br>Activos: 2180","Canada <br>Activos: 10204","Canada <br>Activos: 3307","Canada <br>Activos: 393","Canada <br>Activos: 168","Canada <br>Activos: 263","Canada <br>Activos: 1004","Canada <br>Activos: 37866","Canada <br>Activos: 36","Canada <br>Activos: 53061","Canada <br>Activos: 1193","Central African Republic <br>Activos: 2994","Chad <br>Activos: 37","Chile <br>Activos: 18782","China <br>Activos: 27","China <br>Activos: 1","China <br>Activos: 4","China <br>Activos: 19","China <br>Activos: 343","China <br>Activos: 1254","China <br>Activos: 1270","China <br>Activos: 13","China <br>Activos: 1","China <br>Activos: 2","China <br>Activos: 47","China <br>Activos: 2","China <br>Activos: 7","China <br>Activos: 18","China <br>Activos: 6","China <br>Activos: 6","China <br>Activos: 235","China <br>Activos: 2","China <br>Activos: 1","Colombia <br>Activos: 117163","Congo (Brazzaville) <br>Activos: 2317","Congo (Kinshasa) <br>Activos: 2936","Costa Rica <br>Activos: 11902","Cote d'Ivoire <br>Activos: 5198","Croatia <br>Activos: 806","Cuba <br>Activos: 94","Cyprus <br>Activos: 189","Czechia <br>Activos: 3715","Denmark <br>Activos: 26","Greenland <br>Activos: 1","Denmark <br>Activos: 517","Djibouti <br>Activos: 24","Dominican Republic <br>Activos: 32869","Ecuador <br>Activos: 40733","Egypt <br>Activos: 52992","El Salvador <br>Activos: 6849","Equatorial Guinea <br>Activos: 2178","Eritrea <br>Activos: 74","Estonia <br>Activos: 42","Eswatini <br>Activos: 1257","Ethiopia <br>Activos: 7933","Fiji <br>Activos: 9","Finland <br>Activos: 149","France <br>Activos: 1425","France <br>Activos: 2","France <br>Activos: 13","France <br>Activos: 190","France <br>Activos: 61","France <br>Activos: 1","France <br>Activos: 5","France <br>Activos: 156","France <br>Activos: 107072","Gabon <br>Activos: 2458","Gambia <br>Activos: 252","Georgia <br>Activos: 199","Germany <br>Activos: 7673","Ghana <br>Activos: 3655","Greece <br>Activos: 2651","Guatemala <br>Activos: 11093","Guinea <br>Activos: 753","Guyana <br>Activos: 188","Haiti <br>Activos: 2817","Honduras <br>Activos: 33536","Hungary <br>Activos: 523","Iceland <br>Activos: 21","India <br>Activos: 495499","Indonesia <br>Activos: 37292","Iran <br>Activos: 22550","Iraq <br>Activos: 30983","Ireland <br>Activos: 764","Israel <br>Activos: 36378","Italy <br>Activos: 12581","Jamaica <br>Activos: 129","Japan <br>Activos: 8174","Jordan <br>Activos: 124","Kazakhstan <br>Activos: 29659","Kenya <br>Activos: 9857","South Korea <br>Activos: 896","Kuwait <br>Activos: 8884","Kyrgyzstan <br>Activos: 10790","Latvia <br>Activos: 143","Lebanon <br>Activos: 2122","Liberia <br>Activos: 449","Liechtenstein <br>Activos: 4","Lithuania <br>Activos: 319","Luxembourg <br>Activos: 1384","Madagascar <br>Activos: 3339","Malaysia <br>Activos: 179","Maldives <br>Activos: 807","Malta <br>Activos: 27","Mauritania <br>Activos: 1399","Mauritius <br>Activos: 2","Mexico <br>Activos: 47657","Moldova <br>Activos: 6252","Monaco <br>Activos: 8","Mongolia <br>Activos: 67","Montenegro <br>Activos: 2039","Morocco <br>Activos: 4018","Namibia <br>Activos: 1734","Nepal <br>Activos: 4950","Netherlands <br>Activos: 14","Netherlands <br>Activos: 4","Netherlands <br>Activos: 36","Netherlands <br>Activos: 47010","New Zealand <br>Activos: 21","Nicaragua <br>Activos: 839","Niger <br>Activos: 36","Nigeria <br>Activos: 22117","North Macedonia <br>Activos: 4183","Norway <br>Activos: 125","Oman <br>Activos: 19637","Pakistan <br>Activos: 27421","Panama <br>Activos: 25034","Papua New Guinea <br>Activos: 51","Paraguay <br>Activos: 1600","Peru <br>Activos: 98752","Philippines <br>Activos: 53649","Poland <br>Activos: 8870","Portugal <br>Activos: 13205","Qatar <br>Activos: 3104","Romania <br>Activos: 17902","Russia <br>Activos: 201097","Rwanda <br>Activos: 899","Saint Lucia <br>Activos: 2","Saint Vincent and the Grenadines <br>Activos: 13","Saudi Arabia <br>Activos: 43238","Senegal <br>Activos: 3093","Serbia <br>Activos: 23598","Seychelles <br>Activos: 75","Singapore <br>Activos: 5119","Slovakia <br>Activos: 537","Slovenia <br>Activos: 238","Somalia <br>Activos: 1560","South Africa <br>Activos: 170537","Spain <br>Activos: 93613","Sri Lanka <br>Activos: 673","Sudan <br>Activos: 4765","Suriname <br>Activos: 534","Sweden <br>Activos: 73695","Switzerland <br>Activos: 1599","Taiwan* <br>Activos: 15","Tanzania <br>Activos: 305","Thailand <br>Activos: 128","Togo <br>Activos: 249","Trinidad and Tobago <br>Activos: 12","Tunisia <br>Activos: 248","Turkey <br>Activos: 10920","Uganda <br>Activos: 140","Ukraine <br>Activos: 28258","United Arab Emirates <br>Activos: 6322","United Kingdom <br>Activos: 4","United Kingdom <br>Activos: 4","United Kingdom <br>Activos: 5","United Kingdom <br>Activos: 1","United Kingdom <br>Activos: 254352","Uruguay <br>Activos: 216","US <br>Activos: 2816444","Uzbekistan <br>Activos: 9414","Venezuela <br>Activos: 5883","Vietnam <br>Activos: 66","Zambia <br>Activos: 1597","Zimbabwe <br>Activos: 2126","Mozambique <br>Activos: 1690","Syria <br>Activos: 634","Timor-Leste <br>Activos: 24","Belize <br>Activos: 20","Laos <br>Activos: 1","Libya <br>Activos: 2186","West Bank and Gaza <br>Activos: 6791","Guinea-Bissau <br>Activos: 1125","Mali <br>Activos: 476","Saint Kitts and Nevis <br>Activos: 2","Canada <br>Activos: 5","Canada <br>Activos: 14","Kosovo <br>Activos: 3201","Burma <br>Activos: 52","United Kingdom <br>Activos: 61","Botswana <br>Activos: 674","Burundi <br>Activos: 76","Sierra Leone <br>Activos: 400","Malawi <br>Activos: 1920","France <br>Activos: 3","South Sudan <br>Activos: 1084","Western Sahara <br>Activos: 1","Sao Tome and Principe <br>Activos: 117","Yemen <br>Activos: 375","Comoros <br>Activos: 19","Tajikistan <br>Activos: 1147","Lesotho <br>Activos: 365"],null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["red"],"labels":["Casos activos"],"na_color":null,"na_label":"NA","opacity":0.5,"position":"bottomright","type":"unknown","title":"COVID-19","extra":null,"layerId":null,"className":"info legend","group":null}]}],"limits":{"lat":[-42.8821,71.7069],"lng":[-135,178.065]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(maps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'maps'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    map</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Covid_filtrado <span class="ot">&lt;-</span> Covid <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Active <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>mundo <span class="ot">&lt;-</span> <span class="fu">map_data</span>(<span class="st">"world"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>p_mapa <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_map</span>(<span class="at">data =</span> mundo, <span class="at">map =</span> mundo,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">x =</span> long, <span class="at">y =</span> lat, <span class="at">map_id =</span> region),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">"gray90"</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> Covid_filtrado,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Long, <span class="at">y =</span> Lat, <span class="at">size =</span> Active, <span class="at">frame =</span> Fecha),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">8</span>), <span class="at">name =</span> <span class="st">"Casos activos"</span>) <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Casos Activos de COVID-19"</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Fecha: {frame_time}"</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(Fecha) <span class="sc">+</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ease_aes</span>(<span class="st">'linear'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_map(data = mundo, map = mundo, aes(x = long, y = lat, map_id =
+region), : Ignoring unknown aesthetics: x and y</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_point(data = Covid_filtrado, aes(x = Long, y = Lat, size =
+Active, : Ignoring unknown aesthetics: frame</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># anim_mapa &lt;- animate(p_mapa, width = 900, height = 500, fps = 15, duration = 10, renderer = gifski_renderer())</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># anim_mapa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
 </section>
 
 </main>

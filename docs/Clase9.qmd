@@ -7,10 +7,127 @@ editor: visual
 
 ## Introducción a los gráficos dinámicos
 
-## Introducción a gganimate
+gganimate es una extensión del paquete ggplot2 que permite crear gráficos animados. Permite mostrar cambios en los datos a lo largo del tiempo o de alguna otra dimensión (por ejemplo, categorías, etapas, etc.). Las animaciones pueden ser exportadas como GIF, MP4 o HTML.
+
+```{r}
+library(tidyverse)
+library(gganimate)
+library(leaflet)
+
+Covid <- read.csv("data/covid_19_clean_complete_p1.csv")
+
+Covid <- Covid %>% 
+  mutate(Fecha = ymd(Date))
+```
+
+::: {.panel-tabset}
+
+## Introducción a los gráficos dinámicos
+
+Animando casos confirmados en 5 países seleccionados
+
+```{r, warning=FALSE, message=FALSE}
+
+paises <- c("Italy", "Spain", "United States", "China", "Brazil")
+
+Covid_filtrado <- Covid %>%
+  filter(Country.Region %in% paises) %>%
+  group_by(Fecha, Country.Region) %>%
+  summarise(Confirmed = sum(Confirmed), .groups = "drop")
+
+p1 <- ggplot(Covid_filtrado, aes(x = Fecha, y = Confirmed, color = Country.Region)) +
+  geom_line(size = 1.2) +
+  labs(title = "Casos confirmados de COVID-19",
+       subtitle = "Fecha: {frame_time}",
+       x = "Fecha", y = "Casos Confirmados",
+       color = "País") +
+  theme_minimal() +
+  transition_reveal(Fecha)+
+  ease_aes('linear')
+
+# anim  <- animate(p1, width = 800, height = 500, fps = 20, duration = 5, renderer = magick_renderer() )
+
+# anim
+```
+
 
 ## Personalización de animaciones con gganimate
 
-## Exportación de las animaciones
+Casos acumulados por país (gráfico de barras)
+
+```{r}
+Covid_bar <- Covid_filtrado %>%
+  group_by(Fecha) %>%
+  mutate(rank = rank(-Confirmed)) %>%
+  filter(rank <= 5)
+
+p2 <- ggplot(Covid_bar, aes(x = reorder(Country.Region, Confirmed), y = Confirmed, fill = Country.Region)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(title = "Top 5 países con más casos confirmados",
+       subtitle = "Fecha: {frame_time}",
+       x = "", y = "Casos Confirmados") +
+  theme_minimal() +
+  transition_time(Fecha) +
+  ease_aes('linear')
+
+# anim2 <- animate(p2, width = 800, height = 500, fps = 20, duration = 10, renderer = magick_renderer())
+
+# anim2
+
+# anim_save("covid_evolucion.gif", anim2)
+```
+
 
 ## Gráficos con leaflet
+
+```{r}
+Covid_ultima_fecha <- Covid %>%
+  filter(Fecha == max(Fecha)) %>%
+  filter(Active > 0)
+
+leaflet::leaflet(Covid_ultima_fecha) %>%
+  leaflet::addTiles() %>%
+  leaflet::addCircleMarkers(
+    lng = ~Long, lat = ~Lat,
+    radius = ~sqrt(Active)/100,
+    color = "red", stroke = FALSE, fillOpacity = 0.5,
+    popup = ~paste(Country.Region, "<br>Activos:", Active)
+  ) %>%
+  leaflet::addLegend("bottomright", colors = "red", labels = "Casos activos", title = "COVID-19")
+```
+
+
+## Mapa animado
+
+```{r}
+library(maps)
+
+Covid_filtrado <- Covid %>%
+  filter(Active > 0)
+
+mundo <- map_data("world")
+
+p_mapa <- ggplot() +
+  geom_map(data = mundo, map = mundo,
+           aes(x = long, y = lat, map_id = region),
+           fill = "gray90", color = "white", size = 0.1) +
+  geom_point(data = Covid_filtrado,
+             aes(x = Long, y = Lat, size = Active, frame = Fecha),
+             color = "red", alpha = 0.5) +
+  scale_size_continuous(range = c(1, 8), name = "Casos activos") +
+  labs(title = "Casos Activos de COVID-19",
+       subtitle = "Fecha: {frame_time}",
+       x = "", y = "") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.text = element_blank(),
+        panel.grid = element_blank()) +
+  transition_time(Fecha) +
+  ease_aes('linear')
+
+# anim_mapa <- animate(p_mapa, width = 900, height = 500, fps = 15, duration = 10, renderer = gifski_renderer())
+
+# anim_mapa
+```
+:::
